@@ -49,12 +49,10 @@ a { color: var(--azul); }
 a:hover { color: var(--azul-hover); }
 input, select, button, textarea { font-family: inherit; font-variant-numeric: inherit; font-feature-settings: inherit; }
 
-/* ---------------------------------------------------------------- cabeçalho / rodapé */
+/* ---------------------------------------------------------------- cabeçalho */
 .topo { background: #fff; box-shadow: 0 1px 6px rgba(51, 51, 51, 0.16); position: relative; z-index: 2; }
 .topo-conteudo { max-width: 1200px; margin: 0 auto; padding: 14px 24px; display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between; }
 .marca { font-size: 1.25rem; font-weight: 500; color: var(--texto); }
-.marca small { display: block; font-size: .78rem; font-weight: 500; color: var(--texto-suave); }
-.selo { display: inline-block; vertical-align: middle; margin-left: 8px; padding: 2px 10px; border-radius: 999px; background: var(--amarelo-fundo); border: 1px solid var(--amarelo-borda); color: #6b4e00; font-size: .72rem; font-weight: 700; letter-spacing: .02em; text-transform: uppercase; }
 /* navegação entre as duas páginas: grande, com a página atual bem marcada (cor + borda + texto) */
 .nav-topo ul { display: flex; gap: 8px; flex-wrap: wrap; list-style: none; margin: 0; padding: 0; }
 .nav-topo a {
@@ -102,8 +100,6 @@ main:focus { outline: none; }
 .lista-oficiais li { margin: 6px 0; }
 .lista-oficiais a { font-weight: 600; }
 .externo::after { content: " ↗"; content: " ↗" / ""; font-weight: 700; }   /* seta decorativa: não é lida por leitores de tela */
-.rodape { margin-top: 40px; background: #fff; border-top: 1px solid var(--borda); }
-.rodape div { max-width: 1200px; margin: 0 auto; padding: 18px 24px; font-size: .8rem; color: var(--texto-suave); }
 
 /* ---------------------------------------------------------------- estrutura */
 main { max-width: 1200px; margin: 0 auto; padding: 24px 24px 40px; }
