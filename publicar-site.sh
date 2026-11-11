@@ -14,7 +14,7 @@ git worktree add -q -B gh-pages "$tmp" origin/gh-pages
 
 cd "$tmp"
 git rm -rq --ignore-unmatch .
-cp "$OLDPWD"/simulador-basico/*.html "$OLDPWD"/simulador-basico/*.js .
+cp -r "$OLDPWD"/simulador-basico/. .        # páginas, scripts, estilo.css e fontes/
 touch .nojekyll
 git add -A
 if git diff --cached --quiet; then

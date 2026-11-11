@@ -42,7 +42,12 @@ const FIXOS = [
     { nome: 'PN rating A', tipo: 'PN', modo: 'AGREGADO', agregado: { principal: 40000, multa: 8000, juros: 2000 }, capag: 200000, divida: 50000 },
     { nome: 'Demais PJ falida 15M + PF/BCN previdenciário', tipo: 'DEMAIS_PJ', falido: true, modo: 'AGREGADO', agregado: { principal: 10000000, multa: 3000000, juros: 2000000 }, capag: 1000000, divida: 20000000, acoes: { RFB_GERAL_50M: { opcao: 1, pfFrac: 0.7 } } },
     { nome: 'PF/BCN acima do limite (erro)', tipo: 'ME_EPP', modo: 'AGREGADO', agregado: { principal: 800000, multa: 200000, juros: 100000 }, capag: 300000, divida: 900000, acoes: { RFB_GERAL_50M: { pfFrac: 1.2 } } },
-    { nome: 'Acima de 50M', tipo: 'DEMAIS_PJ', modo: 'AGREGADO', agregado: { principal: 40000000, multa: 15000000, juros: 5000000 }, capag: 10000000, divida: 60000000 }
+    { nome: 'Acima de 50M', tipo: 'DEMAIS_PJ', modo: 'AGREGADO', agregado: { principal: 40000000, multa: 15000000, juros: 5000000 }, capag: 10000000, divida: 60000000 },
+    { nome: 'Situação: falido e depois "Nenhuma das anteriores"', tipo: 'DEMAIS_PJ', sequenciaSituacao: ['falido', 'nenhuma'], modo: 'AGREGADO', agregado: { principal: 3000000, multa: 1500000, juros: 200000 }, capag: 4000000, divida: 4700000 },
+    { nome: 'Situação: "Nenhuma" e depois baixado (as duas marcadas)', tipo: 'ME_EPP', sequenciaSituacao: ['nenhuma', 'baixado'], modo: 'AGREGADO', agregado: { principal: 800000, multa: 200000, juros: 100000 }, capag: 300000, divida: 900000 },
+    { nome: 'Situação: falido + PF/BCN, "Nenhuma" depois de simular', tipo: 'DEMAIS_PJ', falido: true, modo: 'AGREGADO', agregado: { principal: 10000000, multa: 3000000, juros: 2000000 }, capag: 1000000, divida: 20000000,
+      acoes: { RFB_GERAL_50M: { pfFrac: 0.5, parcelas: 80 } }, sequenciaDepois: ['nenhuma'] },
+    { nome: 'Situação: "Nenhuma" marcada e desmarcada depois de simular', tipo: 'MEI', sequenciaSituacao: ['baixado'], modo: 'POR_DEBITO', debitos: [{ principal: 20000, multa: 4000, juros: 3000 }], capag: 50000, divida: 40000, sequenciaDepois: ['nenhuma', 'nenhuma'] }
 ];
 
 function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -60,7 +65,9 @@ function aleatorio(i) {
     else { c.debitos = Array.from({ length: 1 + Math.floor(rnd() * 3) }, () => dividir(cent(rnd() < 0.5 ? logU(300, 150000) : logU(300, 5000000)))); total = c.debitos.reduce((a, d) => a + d.principal + d.multa + d.juros, 0); }
     c.divida = rnd() < 0.3 ? cent(total) : cent(total * (0.3 + rnd() * 3));
     c.capag = rnd() < 0.05 ? 0 : cent((c.divida || total) / (0.2 + rnd() * 3.5));
+    if (pj && rnd() < 0.25) { c.falido = false; c.baixado = false; c.sequenciaSituacao = Array.from({ length: 1 + Math.floor(rnd() * 3) }, () => esc(['falido', 'baixado', 'nenhuma'])); }
     c.acoes = {};
+    if (pj && rnd() < 0.2) c.sequenciaDepois = Array.from({ length: 1 + Math.floor(rnd() * 2) }, () => esc(['falido', 'baixado', 'nenhuma']));
     if (rnd() < 0.5) c.acoes.RFB_PEQUENO_VALOR = { opcao: Math.floor(rnd() * 4), parcelas: 1 + Math.floor(rnd() * 60) };
     if (rnd() < 0.6) c.acoes.RFB_GERAL_50M = { opcao: Math.floor(rnd() * 2), entrada: 1 + Math.floor(rnd() * 10), parcelas: 1 + Math.floor(rnd() * 140), pfFrac: rnd() < 0.5 ? cent(rnd() * 1.1) : undefined };
     if (rnd() < 0.5) c.acoes.PGFN_PEQUENO_VALOR = { opcao: Math.floor(rnd() * 6), entrada: 1 + Math.floor(rnd() * 5), parcelas: 1 + Math.floor(rnd() * 60) };
@@ -107,6 +114,7 @@ const SITE = {
         if (['MEI', 'ME_EPP', 'DEMAIS_PJ'].includes(c.tipo)) {
             if (c.falido) await clicar(page, 'label[for="sit-falido"]');
             if (c.baixado) await clicar(page, 'label[for="sit-baixado"]');
+            for (const k of c.sequenciaSituacao || []) await clicar(page, `label[for="sit-${k}"]`);
         }
         if (c.modo === 'AGREGADO') {
             await clicar(page, 'label[for="modo-agregado"]');
@@ -126,6 +134,16 @@ const SITE = {
         await clicar(page, '#btnSimularModalidades');
         await page.waitForTimeout(250);
     },
+    // Situação cadastral depois de simular: no site, atualizarPerfilContribuinte esconde a classificação e o
+    // quadro; o usuário precisa confirmar o total e simular de novo.
+    async clicarSituacao(page, cliques, modo) {
+        for (const k of cliques) await clicar(page, `label[for="sit-${k}"]`);
+        // desmarcar "Nenhuma das anteriores" não chama nada no site: o quadro continua visível
+        if (await page.locator('#id-quadro-resumo').isVisible()) return;
+        await clicar(page, modo === 'AGREGADO' ? '#btnConfirmarTotalDebitosAgregado' : '#btnConfirmarTotalDebitos');
+        await clicar(page, '#btnSimularModalidades');
+        await page.waitForTimeout(250);
+    },
     selNatureza: (page, chave) => SITE.linha(page, chave).locator('td').nth(3).locator('select').first(),
     selOpcao: async (page, chave) => { const s = SITE.linha(page, chave).locator('td').nth(3).locator('select'); return (await s.count()) > 1 ? s.nth(1) : s.first(); },
     inpEntrada: (page, chave) => SITE.linha(page, chave).locator('td').nth(6).locator('input'),
@@ -141,6 +159,7 @@ const BASICO = {
         if (['MEI', 'ME_EPP', 'DEMAIS_PJ'].includes(c.tipo)) {
             if (c.falido) await page.check('#sit-falido');
             if (c.baixado) await page.check('#sit-baixado');
+            for (const k of c.sequenciaSituacao || []) await page.locator(`#sit-${k}`).click();
         }
         await page.check(`input[name="modo"][value="${c.modo}"]`);
         if (c.modo === 'AGREGADO') {
@@ -154,6 +173,10 @@ const BASICO = {
         }
         await digitarTeclaPorTecla(page, page.locator('#capag'), c.capag);
         await digitarTeclaPorTecla(page, page.locator('#divida-total'), c.divida);
+        await page.waitForTimeout(100);
+    },
+    async clicarSituacao(page, cliques) {
+        for (const k of cliques) await page.locator(`#sit-${k}`).click();
         await page.waitForTimeout(100);
     },
     selNatureza: (page, chave) => page.locator(`select[data-acao="natureza"][data-chave="${chave}"]`),
@@ -176,11 +199,13 @@ async function planejarAcoes(page, c) {
         if (a.parcelas !== undefined) plano.push({ chave, tipo: 'parcelas', valor: a.parcelas });
         if (a.pfFrac !== undefined && chave === 'RFB_GERAL_50M') plano.push({ chave, tipo: 'pfbcn', frac: a.pfFrac });
     }
+    if (c.sequenciaDepois && c.sequenciaDepois.length) plano.push({ tipo: 'situacao', cliques: c.sequenciaDepois, modo: c.modo });
     return plano;
 }
 
 async function executarAcao(page, D, acao, resolvido) {
     const { chave, tipo } = acao;
+    if (tipo === 'situacao') { await D.clicarSituacao(page, acao.cliques, acao.modo); return; }
     if (tipo === 'natureza') { const s = D.selNatureza(page, chave); if (await s.count()) await s.selectOption(acao.valor); return; }
     if (tipo === 'opcao') {
         const s = await D.selOpcao(page, chave);

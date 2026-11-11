@@ -381,6 +381,17 @@
     });
     $('#sit-falido').addEventListener('change', e => { estado.situacao.falidoRecuperacao = e.target.checked; aoMudarFormulario(); });
     $('#sit-baixado').addEventListener('change', e => { estado.situacao.baixadoInapto = e.target.checked; aoMudarFormulario(); });
+    // "Nenhuma das anteriores" (simulador.html, #sit-nenhuma): ao MARCAR, desmarca falido e baixado e
+    // chama atualizarPerfilContribuinte (= aoMudarFormulario); ao DESMARCAR, o site não faz nada.
+    // Ela não entra no estado do site: marcar falido/baixado depois não a desmarca, e trocar para
+    // pessoa natural desmarca só falido/baixado. A interface repete esse comportamento.
+    $('#sit-nenhuma').addEventListener('change', e => {
+        if (!e.target.checked) return;
+        $('#sit-falido').checked = false;
+        $('#sit-baixado').checked = false;
+        estado.situacao = { falidoRecuperacao: false, baixadoInapto: false };
+        aoMudarFormulario();
+    });
     $$('input[name="modo"]').forEach(r => r.addEventListener('change', e => {
         estado.modo = e.target.value;
         // Como no site (selecionarModoSimulacao): os dados do outro modo são apagados
@@ -523,6 +534,7 @@
         detalhesAbertos.clear();
         erroPfBcn = '';
         capagJaCalculada = false; ultimaCapagValida = null; simulacaoLiberada = false;
+        $('#sit-nenhuma').checked = false;
         history.replaceState(null, '', location.href.split('?')[0]);
         preencherFormulario();
         recalcular();
