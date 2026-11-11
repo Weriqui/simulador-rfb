@@ -78,12 +78,12 @@
         const corpo = $('#corpo-debitos');
         corpo.innerHTML = estado.debitos.map((d, i) => `
             <tr>
-                <td>${i + 1}</td>
-                <td><input class="moeda" type="text" inputmode="decimal" placeholder="0,00" data-debito="${i}" data-campo="principal"></td>
-                <td><input class="moeda" type="text" inputmode="decimal" placeholder="0,00" data-debito="${i}" data-campo="multa"></td>
-                <td><input class="moeda" type="text" inputmode="decimal" placeholder="0,00" data-debito="${i}" data-campo="juros"></td>
-                <td data-total-debito="${i}">${fm((d.principal || 0) + (d.multa || 0) + (d.juros || 0))}</td>
-                <td><button type="button" class="pequeno" data-remover="${i}" title="Excluir débito">✕</button></td>
+                <td data-rotulo="Débito">${i + 1}</td>
+                <td data-rotulo="Principal (R$)"><input class="moeda" type="text" inputmode="decimal" placeholder="0,00" data-debito="${i}" data-campo="principal" aria-label="Principal do débito ${i + 1} (R$)"></td>
+                <td data-rotulo="Multa (R$)"><input class="moeda" type="text" inputmode="decimal" placeholder="0,00" data-debito="${i}" data-campo="multa" aria-label="Multa do débito ${i + 1} (R$)"></td>
+                <td data-rotulo="Juros (R$)"><input class="moeda" type="text" inputmode="decimal" placeholder="0,00" data-debito="${i}" data-campo="juros" aria-label="Juros do débito ${i + 1} (R$)"></td>
+                <td data-rotulo="Total (R$)" data-total-debito="${i}">${fm((d.principal || 0) + (d.multa || 0) + (d.juros || 0))}</td>
+                <td><button type="button" class="pequeno" data-remover="${i}" aria-label="Excluir o débito ${i + 1}">✕</button></td>
             </tr>`).join('');
         estado.debitos.forEach((d, i) => {
             ['principal', 'multa', 'juros'].forEach(c => escreverMoeda(corpo.querySelector(`input[data-debito="${i}"][data-campo="${c}"]`), d[c]));
@@ -115,6 +115,8 @@
         $('#bloco-por-debito').classList.toggle('oculto', estado.modo !== 'POR_DEBITO');
         const total = totalDebitos();
         $('#total-debitos').value = fm(total);
+        $('#total-agregado').textContent = 'R$ ' + fm(total);
+        $('#linha-total-debitos').classList.toggle('oculto', estado.modo !== 'POR_DEBITO');
         const fixo = estado.totalTransacionarFixo !== null;
         $('#fixar-transacionar').checked = fixo;
         $('#total-transacionar').readOnly = !fixo;
@@ -214,7 +216,7 @@
         if (e.semEntrada) return '<td class="centro" style="color:#777">Sem Entrada</td>';
         if (!m.permiteEditarParcelasEntrada) return `<td class="centro">R$ ${fm(e.valor)}${e.parcelas ? ' em ' + e.parcelas + 'x' : ''}</td>`;
         return `<td class="centro">R$ ${fm(e.valor)} em
-            <input class="parc" type="number" min="1" ${e.maximo ? `max="${e.maximo}"` : ''} value="${e.parcelas}" data-acao="entrada" data-chave="${m.chave}"> x
+            <input class="parc" type="number" min="1" ${e.maximo ? `max="${e.maximo}"` : ''} value="${e.parcelas}" data-acao="entrada" data-chave="${m.chave}" aria-label="Parcelas da entrada — ${m.nome}"> x
             <div class="sub">R$ ${fm(e.valorParcela)}/parcela</div>
             ${e.maximo ? `<div class="sub">Máx: ${e.maximo}x</div>` : ''}</td>`;
     }
@@ -222,7 +224,7 @@
     function celulaParcelas(m) {
         const p = m.exibicao.parcelas;
         return `<td class="centro">R$ ${fm(p.saldo)} em
-            <input class="parc" type="number" min="1" max="${p.maximo}" value="${p.quantidade}" data-acao="parcelas" data-chave="${m.chave}"> x
+            <input class="parc" type="number" min="1" max="${p.maximo}" value="${p.quantidade}" data-acao="parcelas" data-chave="${m.chave}" aria-label="Número de parcelas — ${m.nome}"> x
             <div class="sub">R$ ${fm(p.valorParcela)}/parcela</div>
             <div class="sub">Máx: ${p.maximo}x</div></td>`;
     }
@@ -231,7 +233,7 @@
         const pf = m.exibicao.pfBcn;
         if (m.chave !== 'RFB_GERAL_50M' || !pf.permitido) return `<td class="centro">${pf.texto || 'NÃO'}</td>`;
         return `<td class="centro">
-            <input class="pf moeda ${erroPfBcn ? 'erro' : ''}" type="text" inputmode="decimal" value="${fm(pf.valor)}" data-acao="pfbcn" data-chave="${m.chave}">
+            <input class="pf moeda ${erroPfBcn ? 'erro' : ''}" type="text" inputmode="decimal" value="${fm(pf.valor)}" data-acao="pfbcn" data-chave="${m.chave}" aria-label="Valor de PF/BCN a utilizar (R$) — ${m.nome}">
             <div class="sub">Limite: R$ ${fm(pf.limite)}</div>
             ${erroPfBcn ? `<div class="erro-texto">${erroPfBcn}</div>` : ''}</td>`;
     }
@@ -239,12 +241,12 @@
     function celulaOpcoes(m) {
         let html = '';
         if (m.possuiSeletorNatureza) {
-            html += `<select data-acao="natureza" data-chave="${m.chave}">
+            html += `<select data-acao="natureza" data-chave="${m.chave}" aria-label="Natureza dos débitos — ${m.nome}">
                 <option value="FAZENDARIO" ${m.natureza === 'FAZENDARIO' ? 'selected' : ''}>Débitos Fazendários</option>
                 <option value="PREVIDENCIARIO" ${m.natureza === 'PREVIDENCIARIO' ? 'selected' : ''}>Débitos Previdenciários</option>
             </select><br>`;
         }
-        html += `<select data-acao="opcao" data-chave="${m.chave}">${m.opcoesDisponiveis.map(o =>
+        html += `<select data-acao="opcao" data-chave="${m.chave}" aria-label="Modalidade — ${m.nome}">${m.opcoesDisponiveis.map(o =>
             `<option value="${o.index}" ${o.index === m.opcaoIndex ? 'selected' : ''}>${o.rotulo}</option>`).join('')}</select>`;
         return `<td>${html}</td>`;
     }
@@ -361,7 +363,7 @@
                     ${celulaEntrada(m)}
                     ${celulaParcelas(m)}
                     ${celulaPfBcn(m)}
-                    <td class="centro"><button type="button" class="pequeno" data-acao="detalhes" data-chave="${m.chave}">${aberto ? '− Ocultar' : '+ Detalhes'}${temAviso ? ' ⚠' : ''}</button></td>
+                    <td class="centro"><button type="button" class="pequeno" data-acao="detalhes" data-chave="${m.chave}" aria-expanded="${aberto ? 'true' : 'false'}" aria-label="Memória de cálculo — ${m.nome}">${aberto ? '− Ocultar' : '+ Detalhes'}${temAviso ? ' ⚠' : ''}</button></td>
                 </tr>
                 <tr class="linha-detalhe ${aberto ? '' : 'oculto'}"><td colspan="10"><div class="detalhe-fixo"><h4>Memória de cálculo — ${m.nome}</h4>${memoriaCalculo(m, r)}</div></td></tr>`;
         }).join('');

@@ -73,25 +73,26 @@
         </div>
         <div id="bloco-agregado" class="cartao tabela-cartao">
             <table class="tabela-composicao">
-                <thead><tr><th>Débitos</th><th>Principal - Soma (R$)</th><th>Multa - Soma (R$)</th><th>Juros - Soma (R$)</th></tr></thead>
+                <thead><tr><th>Débitos</th><th>Principal - Soma (R$)</th><th>Multa - Soma (R$)</th><th>Juros - Soma (R$)</th><th>Total (R$)</th></tr></thead>
                 <tbody><tr>
                     <td>Total dos Débitos Informados</td>
                     <td data-rotulo="Principal - Soma (R$)"><input class="moeda" data-agregado="principal" type="text" inputmode="decimal" placeholder="0,00" aria-label="Principal - soma (R$)"></td>
                     <td data-rotulo="Multa - Soma (R$)"><input class="moeda" data-agregado="multa" type="text" inputmode="decimal" placeholder="0,00" aria-label="Multa - soma (R$)"></td>
                     <td data-rotulo="Juros - Soma (R$)"><input class="moeda" data-agregado="juros" type="text" inputmode="decimal" placeholder="0,00" aria-label="Juros - soma (R$)"></td>
+                    <td class="celula-total" id="total-agregado" data-rotulo="Total (R$)">R$ 0,00</td>
                 </tr></tbody>
             </table>
         </div>
         <div id="bloco-por-debito" class="oculto">
             <div class="cartao tabela-cartao">
-                <table class="tabela-debitos">
+                <table class="tabela-debitos tabela-empilhavel">
                     <thead><tr><th>Débito</th><th>Principal (R$)</th><th>Multa (R$)</th><th>Juros (R$)</th><th>Total (R$)</th><th><span class="oculto">Excluir</span></th></tr></thead>
                     <tbody id="corpo-debitos"></tbody>
                 </table>
             </div>
             <div class="barra-botoes"><button type="button" id="btn-incluir-debito">+ Incluir novo débito</button></div>
         </div>
-        <div class="linha-total"><label for="total-debitos">Total dos débitos (R$)</label><input id="total-debitos" class="moeda" type="text" readonly></div>
+        <div class="linha-total oculto" id="linha-total-debitos"><label for="total-debitos">Total Geral da Dívida (R$)</label><input id="total-debitos" class="moeda" type="text" readonly></div>
     </section>
 
     <!-- CLASSIFICAÇÃO -->
