@@ -1,11 +1,15 @@
-# Publica o simulador (somente a pasta simulador-basico/) no GitHub Pages.
+# Publica o simulador (somente a pasta simulador-basico/) no GitHub Pages pelo GitHub Actions.
 # As cópias das páginas oficiais (simulador.html, js/, fontes-oficiais/) ficam no repositório
 # só como referência e NÃO são publicadas como site.
+#
+# Hoje o site é publicado pelo branch gh-pages (script ./publicar-site.sh), porque o GitHub Actions
+# desta conta está bloqueado por pendência de cobrança. Para voltar a usar este fluxo:
+# Settings › Pages › Source = "GitHub Actions" e descomentar o gatilho "push" abaixo.
 name: Publicar simulador no GitHub Pages
 
 on:
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
   workflow_dispatch:
 
 permissions:

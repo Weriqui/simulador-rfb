@@ -145,7 +145,14 @@ node comparar-formularios.js --fixos        # os 16 cenários gravados ao vivo n
 
 ### Site (GitHub Pages)
 
-O fluxo [.github/workflows/pages.yml](.github/workflows/pages.yml) publica **somente** a pasta `simulador-basico/` a cada push na branch `main`. As cópias das páginas oficiais (`simulador.html`, `js/`, `fontes-oficiais/`) ficam no repositório só como referência para os testes e não são publicadas como site.
+O site publica **somente** o conteúdo de `simulador-basico/`, servido pelo branch `gh-pages`. As cópias das páginas oficiais (`simulador.html`, `js/`, `fontes-oficiais/`) ficam no repositório só como referência para os testes e não são publicadas como site.
+
+Para atualizar o site depois de mudar o simulador, rode `./publicar-site.sh` (Git Bash). O script:
+1. roda `testes/verificar-motores.js` e para se algum resultado divergir;
+2. copia `simulador-basico/` para o branch `gh-pages` e envia ao GitHub;
+3. o GitHub publica em cerca de 1 minuto.
+
+O fluxo [.github/workflows/pages.yml](.github/workflows/pages.yml) faz o mesmo pelo GitHub Actions. Hoje ele está só com disparo manual, porque o Actions da conta está bloqueado por pendência de cobrança.
 
 ## Resultados (10 e 11/11/2026)
 
