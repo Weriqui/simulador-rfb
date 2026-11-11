@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulários de adesão (não oficial)</title>
+    <style>
+        :root {
+            --azul: #1351b4; --azul-escuro: #0c326f; --azul-claro: #dbe8fb; --verde: #168821;
+            --vermelho: #b00020; --laranja: #b35c00; --texto: #1b1b1b; --texto-suave: #555;
+            --borda: #d6d6d6; --fundo: #f5f6f8; --cartao: #ffffff;
+        }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; color: var(--texto); background: var(--fundo); }
+        header { background: var(--azul-escuro); color: #fff; padding: 16px 24px; }
+        header h1 { margin: 0; font-size: 1.35rem; font-weight: 600; }
+        header p { margin: 4px 0 0; opacity: .85; font-size: .9rem; }
+        header a { color: #fff; }
+        main { max-width: 1300px; margin: 0 auto; padding: 20px 16px 60px; }
+        .aviso { background: #fff5c2; border: 1px solid #f0d36b; border-radius: 10px; padding: 10px 14px; font-size: .85rem; margin-bottom: 18px; }
+        .abas { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+        .abas button { border-radius: 10px 10px 0 0; border-bottom: 3px solid transparent; }
+        .abas button.ativa { background: var(--azul); color: #fff; }
+        .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
+        .cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,.04); margin-bottom: 16px; }
+        .cartao h2 { margin: 0 0 12px; font-size: 1.05rem; color: var(--azul-escuro); }
+        .cartao h3 { margin: 14px 0 8px; font-size: .95rem; }
+        .opcoes label { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; cursor: pointer; font-size: .92rem; }
+        .opcoes input { margin-top: 3px; accent-color: var(--azul); }
+        .linha-campo { display: grid; grid-template-columns: 1fr 190px; gap: 10px; align-items: center; margin: 8px 0; }
+        .linha-campo span { font-size: .9rem; }
+        input[type="text"], select { font: inherit; padding: 6px 8px; border: 1px solid #888; border-radius: 6px; background: #fff; color: var(--texto); }
+        input.moeda { text-align: right; width: 100%; }
+        input:focus, select:focus { outline: 2px solid var(--azul); outline-offset: 1px; }
+        table { border-collapse: collapse; width: 100%; }
+        .tabela th, .tabela td { padding: 6px 8px; border-bottom: 1px solid #eee; font-size: .85rem; text-align: right; white-space: nowrap; }
+        .tabela th { background: #f0f0f0; font-weight: 600; text-align: center; white-space: normal; }
+        .tabela td.esq, .tabela th.esq { text-align: left; }
+        .tabela tr.total td { font-weight: 700; background: #fafafa; }
+        .tabela-entrada input { width: 100%; text-align: right; min-width: 90px; }
+        .tabela-entrada td { padding: 3px; }
+        .container-tabela { overflow-x: auto; }
+        button { font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--azul); background: #fff; color: var(--azul); padding: 6px 16px; font-weight: 600; }
+        button.primario { background: var(--azul); color: #fff; }
+        button.pequeno { padding: 2px 10px; font-size: .8rem; }
+        .barra-botoes { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+        .dica { font-size: .8rem; color: var(--texto-suave); }
+        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+        .kpis div { background: var(--fundo); border-radius: 8px; padding: 8px 10px; font-size: .8rem; }
+        .kpis strong { display: block; font-size: 1.05rem; color: var(--azul-escuro); font-variant-numeric: tabular-nums; }
+        .erros { background: #fde8eb; border: 1px solid #f3b5bf; color: var(--vermelho); border-radius: 10px; padding: 10px 14px; font-size: .85rem; margin-bottom: 14px; }
+        .avisos { background: #fff4e5; border: 1px solid #f5cf9a; color: #6b3b00; border-radius: 10px; padding: 10px 14px; font-size: .82rem; margin-bottom: 14px; }
+        .erros ul, .avisos ul { margin: 4px 0 0 18px; padding: 0; }
+        .item-edital { background: var(--azul-claro); color: var(--azul-escuro); border-radius: 8px; padding: 8px 12px; font-size: .88rem; margin-bottom: 10px; }
+        .toast { position: fixed; bottom: 18px; right: 18px; background: var(--azul-escuro); color: #fff; padding: 10px 16px; border-radius: 8px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+        .toast.visivel { opacity: 1; }
+        .oculto { display: none !important; }
+        @media (max-width: 640px) { .linha-campo { grid-template-columns: 1fr; } main { padding: 14px 10px 50px; } }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Formulários de adesão (discriminativos) — simulador não oficial</h1>
+    <p>Reproduz as contas dos formulários da RFB que geram o PDF anexado ao pedido de adesão. Sem vínculo com a Receita Federal · <a href="./index.html">voltar ao simulador da calculadora</a></p>
+</header>
+<main>
+    <div class="aviso">
+        Estes formulários calculam <strong>diferente da calculadora</strong> (por exemplo, no de até R$ 50 milhões o desconto é aplicado <strong>débito a débito</strong>).
+        Aqui os números saem iguais aos do formulário oficial, inclusive arredondamentos e falhas conhecidas, que aparecem como aviso.
+        <strong>Ferramenta não oficial</strong>: não gera o PDF discriminativo nem substitui os formulários da Receita Federal. Simulação informativa, que não gera direito à transação; nenhum dado sai do seu navegador. Detalhes em <code>FORMULAS.md §12</code>.
+    </div>
+
+    <nav class="abas" id="abas">
+        <button type="button" data-form="ATE60SM">Pequeno Valor (até 60 SM)</button>
+        <button type="button" data-form="FAZENDARIOS">Até R$ 50 mi — fazendários</button>
+        <button type="button" data-form="PREVIDENCIARIOS">Até R$ 50 mi — previdenciários</button>
+        <button type="button" data-form="CONTROVERSIA">Controvérsia jurídica</button>
+    </nav>
+
+    <div id="entradas"></div>
+
+    <div class="barra-botoes">
+        <button type="button" class="primario" id="btn-copiar-link">Copiar link desta simulação</button>
+        <button type="button" id="btn-copiar-json">Copiar resultado (JSON)</button>
+        <button type="button" id="btn-limpar">Limpar este formulário</button>
+    </div>
+
+    <section id="resultado"></section>
+</main>
+<div class="toast" id="toast"></div>
+<script src="./motor-formularios.js"></script>
+<script src="./formularios-app.js"></script>
+</body>
+</html>
