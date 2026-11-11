@@ -56,20 +56,20 @@
         const v = M.valorDeCampo(valor);
         return v === null ? String(valor) : M.fmt(v);
     };
-    const campoMoeda = (caminho, valor, extra = '') => `<input type="text" class="moeda" inputmode="decimal" placeholder="0,00" data-caminho="${caminho}" value="${esc(exibirMoeda(valor))}" ${extra}>`;
+    const campoMoeda = (caminho, valor, rotulo = '') => `<input type="text" class="moeda" inputmode="decimal" placeholder="0,00" data-caminho="${caminho}" value="${esc(exibirMoeda(valor))}"${rotulo ? ` aria-label="${esc(rotulo)}"` : ''}>`;
 
     function htmlDebitosPmj(s, comProcesso) {
         const linhas = s.debitos.map((d, i) => `
             <tr>
-                <td>${i + 1}</td>
-                ${comProcesso ? `<td><input type="text" data-caminho="debitos.${i}.processo" value="${esc(d.processo)}" placeholder="opcional" style="width:150px"></td>` : ''}
-                <td>${campoMoeda(`debitos.${i}.principal`, d.principal)}</td>
-                <td>${campoMoeda(`debitos.${i}.multa`, d.multa)}</td>
-                <td>${campoMoeda(`debitos.${i}.juros`, d.juros)}</td>
-                <td><button type="button" class="pequeno" data-acao="remover-debito" data-i="${i}" title="Excluir débito">✕</button></td>
+                <td data-rotulo="Débito">${i + 1}</td>
+                ${comProcesso ? `<td data-rotulo="Nº do processo (opcional)"><input type="text" data-caminho="debitos.${i}.processo" value="${esc(d.processo)}" placeholder="opcional" style="width:150px" aria-label="Nº do processo do débito ${i + 1} (opcional)"></td>` : ''}
+                <td data-rotulo="Principal (R$)">${campoMoeda(`debitos.${i}.principal`, d.principal, `Principal do débito ${i + 1} (R$)`)}</td>
+                <td data-rotulo="Multa (R$)">${campoMoeda(`debitos.${i}.multa`, d.multa, `Multa do débito ${i + 1} (R$)`)}</td>
+                <td data-rotulo="Juros (R$)">${campoMoeda(`debitos.${i}.juros`, d.juros, `Juros do débito ${i + 1} (R$)`)}</td>
+                <td><button type="button" class="pequeno" data-acao="remover-debito" data-i="${i}" aria-label="Excluir o débito ${i + 1}">✕</button></td>
             </tr>`).join('');
         return `
-            <div class="container-tabela"><table class="tabela tabela-entrada">
+            <div class="container-tabela"><table class="tabela tabela-entrada tabela-empilhavel">
                 <thead><tr><th>#</th>${comProcesso ? '<th>Nº do processo</th>' : ''}<th>Principal (R$)</th><th>Multa (R$)</th><th>Juros (R$)</th><th></th></tr></thead>
                 <tbody>${linhas}</tbody>
             </table></div>
@@ -97,7 +97,6 @@
         const pj = s.tipo === 'ME_EPP' || s.tipo === 'DEMAIS_PJ';
         const tipos = Object.entries(M.TIPOS_50M).map(([k, v]) => `<label><input type="radio" name="tipo" value="${k}" data-caminho="tipo" ${s.tipo === k ? 'checked' : ''}> ${esc(v)}</label>`).join('');
         return `
-        <div class="grade">
             <div class="cartao">
                 <h2>1. Identificação do contribuinte</h2>
                 <div class="opcoes">${tipos}</div>
@@ -108,66 +107,58 @@
                     <p class="dica">Óbito, falência ou baixa forçam o rating D. No formulário, a Demais PJ falida tem desconto máximo de 65% (não 70%).</p>
                 </div>
             </div>
-            <div class="cartao">
-                <h2>3. Classificação dos débitos</h2>
-                <div class="linha-campo"><span>Valor total da dívida na PGFN e RFB, fora do contencioso (R$) *</span>${campoMoeda('dividaPgfnRfb', s.dividaPgfnRfb)}</div>
-                <div class="linha-campo"><span>Capacidade de pagamento em 60 meses (R$) *</span>${campoMoeda('capag', s.capag)}</div>
-                <p class="dica">O formulário soma esse valor ao total do contencioso. Não inclua de novo os débitos do contencioso.</p>
-                <h3>Prejuízo fiscal / BCN (só ME/EPP e Demais PJ com rating C ou D)</h3>
-                <label class="opcoes"><span style="display:flex;gap:8px"><input type="checkbox" data-caminho="comPf" ${s.comPf ? 'checked' : ''}> Escolher a opção <strong>com</strong> PF/BCN</span></label>
-                <div class="${s.comPf ? '' : 'oculto'}">
-                    <div class="linha-campo"><span>Montante do prejuízo fiscal (R$)</span>${campoMoeda('pf.montante', s.pf.montante)}</div>
-                    <div class="linha-campo"><span>Alíquota do PF (% inteiro)</span><input type="text" class="moeda" data-caminho="pf.aliquota" value="${esc(s.pf.aliquota)}" placeholder="25"></div>
-                    <div class="linha-campo"><span>Montante da BCN da CSLL (R$)</span>${campoMoeda('bcn.montante', s.bcn.montante)}</div>
-                    <div class="linha-campo"><span>Alíquota da BCN (% inteiro)</span><input type="text" class="moeda" data-caminho="bcn.aliquota" value="${esc(s.bcn.aliquota)}" placeholder="9"></div>
-                </div>
-            </div>
-        </div>
         <div class="cartao">
             <h2>2. Débitos do contencioso (um por processo, até R$ 50 milhões cada)</h2>
             ${htmlDebitosPmj(s, true)}
             <p class="dica">O nº do processo é opcional aqui. Se informado, é conferido como no formulário: 15 dígitos, ou 17 com dígitos verificadores, sem repetir em outra linha.</p>
-        </div>`;
+        </div>
+            <div class="cartao">
+                <h2>3. Classificação dos débitos</h2>
+                <label class="linha-campo"><span>Valor total da dívida na PGFN e RFB, fora do contencioso (R$) *</span>${campoMoeda('dividaPgfnRfb', s.dividaPgfnRfb)}</label>
+                <label class="linha-campo"><span>Capacidade de pagamento em 60 meses (R$) *</span>${campoMoeda('capag', s.capag)}</label>
+                <p class="dica">O formulário soma esse valor ao total do contencioso. Não inclua de novo os débitos do contencioso.</p>
+                <h3>Prejuízo fiscal / BCN (só ME/EPP e Demais PJ com rating C ou D)</h3>
+                <label class="opcoes"><span style="display:flex;gap:8px"><input type="checkbox" data-caminho="comPf" ${s.comPf ? 'checked' : ''}> Escolher a opção <strong>com</strong> PF/BCN</span></label>
+                <div class="${s.comPf ? '' : 'oculto'}">
+                    <label class="linha-campo"><span>Montante do prejuízo fiscal (R$)</span>${campoMoeda('pf.montante', s.pf.montante)}</label>
+                    <label class="linha-campo"><span>Alíquota do PF (% inteiro)</span><input type="text" class="moeda" data-caminho="pf.aliquota" value="${esc(s.pf.aliquota)}" placeholder="25"></label>
+                    <label class="linha-campo"><span>Montante da BCN da CSLL (R$)</span>${campoMoeda('bcn.montante', s.bcn.montante)}</label>
+                    <label class="linha-campo"><span>Alíquota da BCN (% inteiro)</span><input type="text" class="moeda" data-caminho="bcn.aliquota" value="${esc(s.bcn.aliquota)}" placeholder="9"></label>
+                </div>
+            </div>`;
     }
 
-    function htmlCredito(caminho, c, tipoFixo) {
+    function htmlCredito(caminho, c, tipoFixo, rotulo) {
         const aliq = ['', 9, 15, 20, 25].map(a => `<option value="${a}" ${String(c.aliquota) === String(a) ? 'selected' : ''}>${a === '' ? '—' : a + '%'}</option>`).join('');
         return `
-            <td>${tipoFixo ? esc(tipoFixo) : `<select data-caminho="${caminho}.tipo"><option ${c.tipo === 'PF' ? 'selected' : ''}>PF</option><option ${c.tipo === 'BCN' ? 'selected' : ''}>BCN</option></select>`}</td>
-            <td>${campoMoeda(caminho + '.montante', c.montante)}</td>
-            <td><select data-caminho="${caminho}.aliquota">${aliq}</select></td>
-            <td>${campoMoeda(caminho + '.valor', c.valor)}</td>`;
+            <td data-rotulo="Tipo">${tipoFixo ? esc(tipoFixo) : `<select data-caminho="${caminho}.tipo" aria-label="Tipo — ${esc(rotulo)}"><option ${c.tipo === 'PF' ? 'selected' : ''}>PF</option><option ${c.tipo === 'BCN' ? 'selected' : ''}>BCN</option></select>`}</td>
+            <td data-rotulo="Montante (R$)">${campoMoeda(caminho + '.montante', c.montante, `Montante (R$) — ${rotulo}`)}</td>
+            <td data-rotulo="Alíquota"><select data-caminho="${caminho}.aliquota" aria-label="Alíquota — ${esc(rotulo)}">${aliq}</select></td>
+            <td data-rotulo="Valor do crédito (R$)">${campoMoeda(caminho + '.valor', c.valor, `Valor do crédito (R$) — ${rotulo}`)}</td>`;
     }
 
     function htmlControversia(s) {
         const opcoes = M.OPCOES_CONTROVERSIA.map(o => `<label><input type="radio" name="opcao" value="${o.codigo}" data-caminho="opcao" ${String(s.opcao) === o.codigo ? 'checked' : ''}>
             ${esc(o.item)} — redução ${Math.round(o.reducao * 100)}%, entrada ${Math.round(o.entrada * 100)}% à vista, saldo em até ${o.parcelasSaldo}x</label>`).join('');
-        const debitos = s.debitos.map((v, i) => `<tr><td>${i + 1}</td><td>${campoMoeda(`debitos.${i}`, v)}</td><td><button type="button" class="pequeno" data-acao="remover-debito" data-i="${i}">✕</button></td></tr>`).join('');
-        const terceiros = s.creditosTerceiros.map((c, i) => `<tr><td>${i + 1}</td>${htmlCredito(`creditosTerceiros.${i}`, c)}<td><button type="button" class="pequeno" data-acao="remover-terceiro" data-i="${i}">✕</button></td></tr>`).join('');
+        const debitos = s.debitos.map((v, i) => `<tr><td data-rotulo="Débito">${i + 1}</td><td data-rotulo="Valor (R$)">${campoMoeda(`debitos.${i}`, v, `Valor atualizado do débito ${i + 1} (R$)`)}</td><td><button type="button" class="pequeno" data-acao="remover-debito" data-i="${i}" aria-label="Excluir o débito ${i + 1}">✕</button></td></tr>`).join('');
+        const terceiros = s.creditosTerceiros.map((c, i) => `<tr><td data-rotulo="Crédito de terceiro">${i + 1}</td>${htmlCredito(`creditosTerceiros.${i}`, c, null, `crédito de terceiro ${i + 1}`)}<td><button type="button" class="pequeno" data-acao="remover-terceiro" data-i="${i}" aria-label="Excluir o crédito de terceiro ${i + 1}">✕</button></td></tr>`).join('');
         return `
-        <div class="grade">
             <div class="cartao">
                 <h2>1. Débitos a transacionar (valor atualizado)</h2>
-                <div class="container-tabela"><table class="tabela tabela-entrada"><thead><tr><th>#</th><th>Valor (R$)</th><th></th></tr></thead><tbody>${debitos}</tbody></table></div>
+                <div class="container-tabela"><table class="tabela tabela-entrada tabela-empilhavel"><thead><tr><th>#</th><th>Valor (R$)</th><th></th></tr></thead><tbody>${debitos}</tbody></table></div>
                 <div class="barra-botoes"><button type="button" class="pequeno" data-acao="incluir-debito">+ Incluir débito</button></div>
             </div>
-            <div class="cartao">
-                <h2>3. Opção de transação</h2>
-                <div class="opcoes">${opcoes}</div>
-                <p class="dica">Parcela mínima R$ 500,00. PF/BCN até 30% da dívida já reduzida; a entrada é calculada depois do abatimento.</p>
-            </div>
-        </div>
         <div class="cartao">
             <h2>2. Créditos de prejuízo fiscal e base negativa (opcional)</h2>
-            <div class="container-tabela"><table class="tabela tabela-entrada">
+            <div class="container-tabela"><table class="tabela tabela-entrada tabela-empilhavel">
                 <thead><tr><th class="esq">Créditos próprios</th><th>Tipo</th><th>Montante (R$)</th><th>Alíquota</th><th>Valor do crédito (R$)</th></tr></thead>
                 <tbody>
-                    <tr><td class="esq">Próprio</td>${htmlCredito('creditosProprios.pf', s.creditosProprios.pf, 'Prejuízo fiscal')}</tr>
-                    <tr><td class="esq">Próprio</td>${htmlCredito('creditosProprios.bcn', s.creditosProprios.bcn, 'BCN da CSLL')}</tr>
+                    <tr><td class="esq">Próprio</td>${htmlCredito('creditosProprios.pf', s.creditosProprios.pf, 'Prejuízo fiscal', 'prejuízo fiscal próprio')}</tr>
+                    <tr><td class="esq">Próprio</td>${htmlCredito('creditosProprios.bcn', s.creditosProprios.bcn, 'BCN da CSLL', 'BCN da CSLL própria')}</tr>
                 </tbody>
             </table></div>
             <h3>Créditos de terceiros</h3>
-            <div class="container-tabela"><table class="tabela tabela-entrada">
+            <div class="container-tabela"><table class="tabela tabela-entrada tabela-empilhavel">
                 <thead><tr><th>#</th><th>Tipo</th><th>Montante (R$)</th><th>Alíquota</th><th>Valor do crédito (R$)</th><th></th></tr></thead>
                 <tbody>${terceiros || '<tr><td colspan="6" class="esq dica">Nenhum crédito de terceiro.</td></tr>'}</tbody>
             </table></div>
@@ -176,7 +167,12 @@
                 <input type="checkbox" data-caminho="corrigirCreditosProprios" ${s.corrigirCreditosProprios ? 'checked' : ''}>
                 <span>Corrigir a falha do formulário com créditos <strong>próprios</strong>. Por padrão o simulador reproduz o formulário oficial, que só soma os créditos próprios quando há crédito de terceiro digitado depois deles (e sem conferir o limite montante × alíquota).</span>
             </label>
-        </div>`;
+        </div>
+            <div class="cartao">
+                <h2>3. Opção de transação</h2>
+                <div class="opcoes">${opcoes}</div>
+                <p class="dica">Parcela mínima R$ 500,00. PF/BCN até 30% da dívida já reduzida; a entrada é calculada depois do abatimento.</p>
+            </div>`;
     }
 
     // Formulário oficial correspondente a cada aba (página "Simular Transação Tributária" da RFB)
@@ -208,9 +204,9 @@
     }
 
     // ---------------------------------- resultado ----------------------------------------
-    const selectParcelas = (caminho, maximo, escolhido, placeholder) => {
+    const selectParcelas = (caminho, maximo, escolhido, placeholder, rotulo) => {
         if (!maximo || maximo < 1) return '<em class="dica">nenhuma opção</em>';
-        let h = `<select data-caminho="${caminho}" data-parcelas="1">`;
+        let h = `<select data-caminho="${caminho}" data-parcelas="1" aria-label="${esc(rotulo || (caminho === 'parcelasEntrada' ? 'Parcelas da entrada' : 'Número de parcelas'))}">`;
         if (placeholder) h += `<option value="" ${escolhido === null ? 'selected' : ''}>Selecione</option>`;
         for (let i = 1; i <= maximo; i++) h += `<option value="${i}" ${escolhido === i ? 'selected' : ''}>${i} parcela${i > 1 ? 's' : ''}</option>`;
         return h + '</select>';
@@ -322,6 +318,21 @@
         }
         $('#resultado').innerHTML = atual === 'ATE60SM' ? resultadoAte60sm(r) : atual === 'CONTROVERSIA' ? resultadoControversia(r) : resultado50M(r);
         history.replaceState(null, '', '?' + M.parametrosDeEntrada(s));
+        anunciar(r);
+    }
+
+    let temporizadorAnuncio = null;
+    function anunciar(r) {
+        clearTimeout(temporizadorAnuncio);
+        temporizadorAnuncio = setTimeout(() => {
+            let texto = '';
+            const x = r.resultado;
+            if (r.erros && r.erros.length) texto = 'O formulário oficial não deixa prosseguir: ' + r.erros[0];
+            else if (x && r.formulario === 'ATE60SM') texto = `Resultado atualizado: saldo R$ ${x.saldo}, ${x.parcelas || 0} parcela(s) de R$ ${x.valorParcela}.`;
+            else if (x && r.formulario === 'CONTROVERSIA') texto = `Resultado atualizado: entrada R$ ${x.entrada}; saldo R$ ${x.saldoAposEntrada}.`;
+            else if (x) texto = `Resultado atualizado: rating ${r.classificacao.rating}; entrada R$ ${x.entrada.entrada}` + (x.restante ? `; saldo R$ ${x.restante.saldo} em ${x.restante.parcelas || 0} parcela(s) de R$ ${x.restante.valorParcela}.` : '.');
+            $('#anuncio').textContent = texto;
+        }, 900);
     }
 
     // ----------------------------------- eventos ------------------------------------------
