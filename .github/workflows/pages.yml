@@ -1,0 +1,35 @@
+# Publica o simulador (somente a pasta simulador-basico/) no GitHub Pages.
+# As cópias das páginas oficiais (simulador.html, js/, fontes-oficiais/) ficam no repositório
+# só como referência e NÃO são publicadas como site.
+name: Publicar simulador no GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Conferir os motores no Node (cenários de referência)
+        run: node testes/verificar-motores.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: simulador-basico
+      - id: deployment
+        uses: actions/deploy-pages@v4

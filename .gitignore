@@ -1,0 +1,10 @@
+# dependências dos testes (npm install em testes/)
+testes/node_modules/
+
+# saídas geradas pelos testes e gravações de sessão (34 MB; recriadas por testes/*.js)
+testes/saida/*
+!testes/saida/mapeamento-requisicoes.md
+
+*.log
+.DS_Store
+Thumbs.db

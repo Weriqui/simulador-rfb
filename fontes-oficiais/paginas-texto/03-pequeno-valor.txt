@@ -1,0 +1,76 @@
+## Transação de Pequeno Valor
+
+## Quem pode aderir
+
+Podem aderir pessoa física, microempreendedor individual (MEI), microempresa (ME) e empresa de pequeno porte (EPP) que possuam processos administrativos em contencioso fiscal sob gestão da Receita Federal, de até 60 salários mínimos (R$ 97.260,00), considerado o limite por processo.
+
+## Quais débitos podem ser negociados
+
+São elegíveis os débitos em contencioso administrativo fiscal, ou seja, aqueles em que já tenha sido apresentada impugnação, manifestação de inconformidade ou recurso com efeito suspensivo da exigibilidade do crédito tributário.
+
+Também podem ser incluídos débitos ainda pendentes de impugnação, desde que o prazo para sua apresentação esteja em curso.
+
+### Confira se seu débito pode ser negociado
+
+Acesse o roteiro "Como consultar pendências" e consulte os critérios de elegibilidade. 
+
+## Condições de pagamento
+
+ | Edital | Opção | Desconto sobre o débito (%) | Quantidade de parcelas 
+
+ | Transação por
+
+ Adesão RFB nº
+
+ 10/2026 | I | 50% | Até 12 
+
+ | II | 40% | Até 24 
+
+ | III | 35% | Até 36 
+
+ | IV | 30% | Até 55 
+
+Os descontos previstos no edital são incondicionados, isto é, não dependem de análise individual da capacidade de pagamento nem da recuperabilidade do crédito. O percentual de desconto varia exclusivamente conforme a modalidade de pagamento escolhida pelo contribuinte.
+
+### Faça uma simulação das condições de pagamento
+
+Acesse o Simulador de Negociações para conhecer as condições de pagamento disponíveis e identificar a opção mais adequada à sua situação.
+
+## Informações importantes
+
+- O desconto será aplicado sobre o valor total da dívida, incluídos principal, juros, multas e encargos.
+
+- O pagamento das prestações deverá ser realizado por meio de Documento de Arrecadação de Receitas Federais (DARF).
+
+- O valor mínimo da parcela é R$ 200,00 (duzentos reais).
+
+- Ao realizar a adesão, o contribuinte poderá cadastrar uma conta bancária para débito automático das parcelas. O débito automático passa a valer a partir da segunda parcela.
+
+- O valor de cada prestação será acrescido de juros correspondente à taxa Selic acumulada desde o mês seguinte ao da consolidação do parcelamento até o mês anterior ao pagamento, além de 1% (um por cento) referente ao mês em que a parcela for paga. 
+
+- O prazo de adesão é às 20h59min59seg, horário de Brasília, do dia 30 de dezembro de 2026.
+
+- Não podem ser incluídos débitos do Simples Nacional, exceto as multas por atraso no cumprimento de obrigação acessória.
+
+## Consequências da adesão
+
+O contribuinte que aderir à transação:
+
+- Desiste das impugnações e dos recursos administrativos ou judiciais relativos aos débitos negociados.
+
+- Renuncia às alegações de direito que fundamentam essas impugnações ou recursos.
+
+- Confessa, de forma irrevogável e irretratável, os débitos incluídos na transação.
+
+- Aceita integralmente as condições previstas no edital e na legislação aplicável.
+
+A apresentação do pedido de adesão não implica, por si só, a desistência do contencioso. A desistência e a renúncia tornam-se efetivas somente com o deferimento da transação.
+
+### Não encontrou a resposta que procurava?
+
+Acesse o Perguntas e Respostas e confira as respostas para as dúvidas mais frequentes sobre a transação.
+
+## LINKS
+- ["Como consultar pendências"](https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/guias-e-roteiros/transacao-tributaria/como-consultar-pendencias.pdf/view)
+- [Simulador de Negociações](https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/transacao-tributaria/calculadora/simulador/)
+- [Perguntas e Respostas](https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/perguntas-frequentes/transacao-tributaria/transacao-tributaria-sobre/transacao-tributaria)

@@ -1,0 +1,194 @@
+Fonte: https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/perguntas-frequentes/transacao-tributaria/edital-de-transacao-por-adesao-rfb-no-10-2026
+Extraído em: 2026-11-11T01:18:30.538Z (Chrome via testes/gravar-sessao.js; conteúdo integral dos acordeões (div.conteudo) lido do DOM; perguntas numeradas na ordem da página)
+Título da página: Edital de Transação por Adesão RFB nº 10/2026 — Receita Federal
+
+# Edital de Transação por Adesão RFB nº 10/2026
+
+## 1. O que é o Edital de Transação RFB nº 10/2026 – Pequeno Valor?
+
+O Edital de Transação RFB nº 10/2026 oferece à pessoa natural, ao microempreendedor individual (MEI), ao empresário individual, à microempresa e à empresa de pequeno porte a possibilidade de negociar créditos tributários de pequeno valor sob gestão da Receita Federal.
+
+Podem ser incluídos créditos tributários em contencioso administrativo fiscal ou pendentes de impugnação, desde que o valor do lançamento fiscal ou da controvérsia não ultrapasse 60 (sessenta) salários-mínimos por processo administrativo.
+
+A transação permite o pagamento parcelado dos créditos tributários com os descontos e nas condições estabelecidos no Edital.
+
+## 2. Quais os débitos elegíveis à transação?
+
+São elegíveis à transação os créditos tributários sob gestão da Receita Federal que estejam em contencioso administrativo fiscal ou pendentes de impugnação, cujo valor do lançamento fiscal ou da controvérsia não ultrapasse 60 (sessenta) salários-mínimos por processo administrativo. Em 2026, esse limite corresponde a R$ 97.260,00.
+
+Podem ser incluídas as contribuições sociais previstas no art. 11, parágrafo único, alíneas "a", "b" e "c", da Lei nº 8.212/1991, as contribuições instituídas a título de substituição e as contribuições devidas por lei a terceiros, desde que recolhidas por meio de Documento de Arrecadação de Receitas Federais (Darf) e pelas quais o aderente responda como contribuinte ou responsável.
+
+Não podem ser incluídos débitos relativos aos tributos apurados no âmbito do Simples Nacional, exceto aqueles decorrentes de multas por atraso no cumprimento de obrigação acessória.
+
+## 3. É possível a adesão para débitos de pequeno valor mesmo para os débitos decorrentes de lançamento de ofício que ainda estão no prazo para impugnação?
+
+Sim. 
+
+O Edital RFB nº 10/2026 permite a inclusão de créditos tributários decorrentes de lançamento de ofício que ainda estejam no prazo para apresentação de impugnação.
+
+Nessa hipótese, não é necessário apresentar impugnação apenas para viabilizar a adesão à transação.
+
+## 4. Qual o conceito de contencioso administrativo para fins de transação?
+
+Para fins da transação, considera-se contencioso administrativo fiscal o procedimento instaurado com a apresentação, pelo sujeito passivo, de impugnação, manifestação de inconformidade ou recurso com efeito suspensivo da exigibilidade do crédito tributário objeto da controvérsia, nos termos do Decreto nº 70.235, de 6 de março de 1972.
+
+Também poderão ser objeto da transação os créditos tributários que ainda estejam pendentes de impugnação, desde que atendidos os requisitos previstos no Edital RFB nº 10/2026.
+
+## 5. Quais são os objetivos da transação tributária?
+
+A transação tributária tem por finalidade possibilitar a resolução consensual de controvérsias tributárias entre o contribuinte e a Receita Federal, permitindo a regularização dos créditos tributários em condições previamente estabelecidas no Edital.
+
+No caso do Edital RFB nº 10/2026, tem como objetivo:
+
+facilitar a regularização de créditos tributários de pequeno valor;
+reduzir a burocracia enfrentada pelos pequenos devedores;
+conceder benefícios previamente definidos para incentivar a regularização fiscal;
+preservar a atividade econômica;
+estimular a conformidade tributária; e
+contribuir para a manutenção da fonte produtora, do emprego e da renda.
+
+## 6. Qual o período de adesão?
+
+A adesão poderá ser realizada desde a data de publicação do Edital até as 20h59min59s (horário de Brasília) do dia 30 de outubro de 2026, observado o disposto no Edital de Transação RFB nº 10/2026.
+
+## 7. Como fazer a adesão?
+
+A adesão deverá ser realizada por meio do Portal de Serviços da Receita Federal.
+
+Após acessar o Portal, selecione o menu "Minhas Negociações de Dívidas" e, em seguida, a opção "Negociar um Novo Parcelamento". Depois, escolha a modalidade correspondente ao Edital de Transação RFB nº 10/2026 e siga as orientações apresentadas pelo sistema.
+
+O limite de 60 (sessenta) salários-mínimos é verificado individualmente para cada processo administrativo.
+
+Caso, por motivo técnico, não seja possível concluir a adesão pelo Portal de Serviços da Receita Federal, o interessado deverá apresentar requerimento por meio do Requerimento Web (Processos Digitais), acompanhado da documentação que comprove a impossibilidade de utilização do sistema.
+
+Para mais informações sobre o procedimento de adesão, consulte o Roteiro Passo a Passo da Transação Tributária.
+  [link: Roteiro Passo a Passo da Transação Tributária -> https://www.gov.br/receitafederal/pt-br/assuntos/transacao-tributaria.]
+
+## 8. O que é considerado para o somatório do débito de pequeno valor em contencioso administrativo fiscal?
+
+Para fins de enquadramento no Edital de Transação RFB nº 10/2026, considera-se o valor do lançamento fiscal ou da controvérsia apurado em cada processo administrativo.
+
+Esse valor corresponde ao somatório do principal, da multa de ofício e dos juros, considerado por processo administrativo, e não poderá ultrapassar o limite de 60 (sessenta) salários-mínimos na data da adesão.
+
+## 9. É obrigatório contribuinte aderir Domicílio Tributário Eletrônico (DTE)?
+
+Sim. 
+
+Para fins de enquadramento no Edital de Transação RFB nº 10/2026, considera-se o valor do lançamento fiscal ou da controvérsia apurado em cada processo administrativo.
+
+Esse valor corresponde ao somatório do principal, da multa de ofício e dos juros, considerado por processo administrativo, e não poderá ultrapassar o limite de 60 (sessenta) salários-mínimos na data da adesão.
+
+## 10. Quais são os descontos e as demais condições de pagamento dos débitos?
+
+Os créditos tributários abrangidos pelo Edital de Transação RFB nº 10/2026 poderão ser negociados por pessoa natural, microempreendedor individual (MEI), empresário individual, microempresa e empresa de pequeno porte, nas seguintes modalidades:
+
+I – pagamento em até 12 prestações mensais e sucessivas, com redução de 50% do valor total da dívida, incluídos principal, juros, multas e encargos;
+
+II – pagamento em até 24 prestações mensais e sucessivas, com redução de 40% do valor total da dívida, incluídos principal, juros, multas e encargos;
+
+III – pagamento em até 36 prestações mensais e sucessivas, com redução de 35% do valor total da dívida, incluídos principal, juros, multas e encargos;
+
+IV – pagamento em até 55 prestações mensais e sucessivas, com redução de 30% do valor total da dívida, incluídos principal, juros, multas e encargos.
+
+Para auxiliar na escolha da modalidade mais adequada, a Receita Federal disponibiliza um Simulador da Transação Tributária em seu portal, no qual é possível estimar os valores das prestações e dos descontos aplicáveis às modalidades previstas no Edital.
+
+## 11. Há valor mínimo da parcela?
+
+Sim.
+
+Qualquer que seja a modalidade de pagamento escolhida, o valor mínimo de cada prestação será de R$ 200,00 (duzentos reais).
+
+O número de prestações será ajustado ao valor do crédito tributário incluído na transação, observado o valor mínimo estabelecido no Edital.
+
+## 12. Quais os motivos que podem levar ao cancelamento do acordo (rescisão)?
+
+A transação poderá ser rescindida nas seguintes hipóteses:
+
+I – ocorrência de qualquer das hipóteses previstas no art. 19 da Portaria Normativa MF nº 1.584/2023;
+
+II – falta de pagamento de três prestações consecutivas ou seis alternadas;
+
+III – falta de pagamento de pelo menos uma prestação, estando pagas todas as demais;
+
+IV – decretação de falência ou extinção, pela liquidação, da pessoa jurídica aderente;
+
+V – utilização de pessoa natural ou jurídica interposta para ocultar ou dissimular bens, direitos, valores, interesses ou beneficiários, em prejuízo da Fazenda Pública Federal;
+
+VI – descumprimento das condições, das cláusulas, das obrigações previstas no Edital ou dos compromissos assumidos pelo aderente; ou
+
+VII – inobservância de qualquer disposição prevista na Lei nº 13.988/2020.
+
+Antes da exclusão da transação, o contribuinte será comunicado para, no prazo de 30 (trinta) dias, regularizar a irregularidade, efetuar o pagamento devido ou apresentar impugnação, quando cabível.
+
+## 13. Há uma data de corte estabelecida para se considerar o débito contencioso administrativo fiscal?
+
+Poderão ser incluídos na transação os créditos tributários que, no momento da adesão, estejam em contencioso administrativo fiscal ou ainda no prazo para apresentação de impugnação, desde que atendidos os demais requisitos previstos no Edital de Transação RFB nº 10/2026.
+
+Assim, não existe data de corte específica além do período de adesão previsto no Edital.
+
+## 14. É possível a adesão de parte dos débitos discutidos em um mesmo processo administrativo?
+
+Não.
+
+O aderente deverá indicar a totalidade dos débitos em discussão no mesmo processo administrativo, sendo vedada a inclusão parcial.
+
+## 15. Apenas processos decorrentes de auto de infração podem entrar? Também podem ser incluídos processos que tiveram origem em despachos decisórios?
+
+Também podem ser incluídos processos originados de despacho decisório, como aqueles relativos à Declaração de Compensação (DCOMP) não homologada pela Receita Federal. Esses processos poderão ser objeto da transação quando estiverem em contencioso administrativo fiscal ou na pendência de apresentação de manifestação de inconformidade, observados os demais requisitos previstos no Edital.
+
+## 16. Como serão os pagamentos das prestações?
+
+O aderente poderá informar, no momento da adesão, os dados bancários para débito automático das prestações, caso tenha interesse.
+
+Caso não opte pelo débito automático, deverá emitir o Documento de Arrecadação de Receitas Federais (Darf) por meio do sistema da Receita Federal e efetuar o pagamento até o último dia útil de cada mês.
+
+O pagamento da primeira prestação até o último dia útil do mês da adesão é condição para o deferimento do pedido de transação.
+
+## 17. É preciso apresentar pedido de desistência do contencioso administrativo fiscal nos processos incluídos na transação?
+
+Não.
+
+Não é necessário apresentar pedido separado de desistência nos processos administrativos incluídos na transação.
+
+A adesão regularmente formalizada suspende a tramitação dos processos administrativos relativos aos créditos tributários incluídos enquanto o pedido é analisado.
+
+Com o deferimento da adesão, a Receita Federal adotará as providências internas necessárias para registrar a desistência das impugnações, manifestações de inconformidade ou recursos relativos aos créditos incluídos na transação.
+
+## 18. Como é a formalização da adesão e o pagamento dos Darfs de uma empresa incorporada?
+
+Na hipótese de incorporação, a adesão deverá ser formalizada pela incorporadora, sucessora dos direitos e das obrigações da incorporada, por seu responsável perante o CNPJ ou por representante legal com poderes específicos.
+
+Os processos administrativos e os respectivos créditos tributários deverão estar corretamente vinculados à sucessora.
+
+Caso o sistema não reconheça automaticamente a sucessão ou impeça a inclusão dos créditos tributários, o interessado deverá apresentar requerimento por meio do Requerimento Web (Processos Digitais), relatando a situação e juntando a documentação pertinente.
+
+Para saber mais sobre o procedimento de adesão, consulte o Roteiro Passo a Passo da Transação Tributária.
+  [link: Roteiro Passo a Passo da Transação Tributária -> https://www.gov.br/receitafederal/pt-br/assuntos/transacao-tributaria]
+
+## 19. O pedido de adesão suspende a cobrança dos débitos para fins de obtenção de certidão negativa de débito (CND)?
+
+Não.
+
+O objeto da transação prevista no Edital RFB nº 10/2026 é o contencioso administrativo fiscal.
+
+Os créditos tributários em discussão administrativa já possuem o tratamento previsto na legislação aplicável, enquanto débitos em cobrança ou meramente declarados pelo contribuinte não são abrangidos por essa modalidade de transação.
+
+Assim, o pedido de adesão à transação, por si só, não interfere na emissão de Certidão Negativa de Débitos (CND).
+
+O pedido de adesão, regularmente formalizado, suspende apenas a tramitação dos processos administrativos fiscais em relação aos débitos incluídos na transação.
+
+Conforme o art. 12 da Lei nº 13.988/2020, a proposta de transação não suspende o crédito tributário e, por isso, não pode ser alegada para fins de emissão de Certidão Negativa de Débitos (CND).
+
+## 20. O pedido de adesão gera automaticamente a desistência do contencioso administrativo fiscal?
+
+Não.
+
+O objeto da transação prevista no Edital RFB nº 10/2026 é o contencioso administrativo fiscal.
+
+Os créditos tributários em discussão administrativa já possuem o tratamento previsto na legislação aplicável, enquanto débitos em cobrança ou meramente declarados pelo contribuinte não são abrangidos por essa modalidade de transação.
+
+Assim, o pedido de adesão à transação, por si só, não interfere na emissão de Certidão Negativa de Débitos (CND).
+
+O pedido de adesão, regularmente formalizado, suspende apenas a tramitação dos processos administrativos fiscais em relação aos débitos incluídos na transação.
+
+Conforme o art. 12 da Lei nº 13.988/2020, a proposta de transação não suspende o crédito tributário e, por isso, não pode ser alegada para fins de emissão de Certidão Negativa de Débitos (CND).

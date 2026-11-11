@@ -1,0 +1,12 @@
+{
+  "name": "testes-simulador-rfb",
+  "private": true,
+  "description": "Mapeamento do site oficial com Chromium e comparação com o motor de cálculo local",
+  "scripts": {
+    "mapear": "node mapear-requisicoes.js",
+    "comparar": "node comparar-com-site.js"
+  },
+  "dependencies": {
+    "playwright-core": "1.48.2"
+  }
+}

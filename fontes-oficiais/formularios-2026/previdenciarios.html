@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!--FAVICON-->
+    <link rel="shortcut icon" href="./assets/img/favicon.ico">
+
+    <!-- Fonte Rawline-->
+    <link rel="stylesheet"
+        href="https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css" />
+
+    <!-- Fonte Raleway-->
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&amp;display=swap" />
+
+    <!-- Fontawesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!--CSS GOVBR-->
+    <link rel="stylesheet" href="./govbr/core-min.css" />
+
+    <!--JS GOVBR-->
+    <script src="./govbr/core-min.js"></script>
+
+    <!--UTILS-->
+    <script src="./assets/js/utils.js"></script>
+
+    <!--FUNCOES ESPECIFICAS DO NEGOCIO-->
+    <script src="./assets/js/negocio-pre.js"></script>
+
+
+    <!--HTML2CANVAS-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" 
+    integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!--JSPDF-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" 
+    integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        .fix {
+            top: 0px !important;
+        }
+
+        @media print {
+        body * {
+            display: none !important;
+        }
+
+        body::before {
+            content: "Impressão desabilitada. Utilize o botão 'Gerar Documento' para gerar o PDF oficial.";
+            display: block;
+            position: fixed;
+            inset: 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #b00020;
+            padding-top: 40vh;
+            background: white;
+        }
+        }
+    </style>
+
+    <title>Litígio Zero 2026</title>
+
+</head>
+
+<!--TEMPLATE LINHA ORDINARIA DA TABELA DETALHAMENTO DOS CREDITOS TRIBUTARIOS-->
+<template id="id-template-debito">
+    <tr>
+        <!-- NUMERO DO PROCESSO -->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center nroProcesso" type="text" onchange="handleValidarProcesso(this)" name="nprocesso">
+            </div>
+        </td>
+
+        <!--VALOR PRINCIPAL-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center principal" type="text" oninput="handleValidarValorNaoNegativo(this)" onchange="calcularValorTotalProcesso(this)" name="valor_principal">
+            </div>
+        </td>
+
+        <!--MULTA-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center multa" type="text" oninput="handleValidarValorNaoNegativo(this)" onchange="calcularValorTotalProcesso(this)" name="multa">
+            </div>
+        </td>
+
+        <!--JUROS-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center juros" type="text" oninput="handleValidarValorNaoNegativo(this)" onchange="calcularValorTotalProcesso(this)" name="juros">
+            </div>
+        </td>
+
+        <!--VALOR TOTAL DO PROCESSO-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center total" type="text" readonly name="valor_total_processo">
+            </div>
+        </td>
+
+        <!--AÇÕES-->
+        <td class="text-center p-2 acoes">
+            <button class="br-button" onclick="excluirLinha(this)">
+                <i class="fa fa-trash-alt"></i>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<!--TEMPLATE LINHA TOTAL GERAL DA TABELA DETALHAMENTO DOS CREDITOS TRIBUTARIOS-->
+<template id="id-template-total-geral">
+    <tr>
+        <td class="text-center text-up-01 p-2"></td>
+        <td class="text-center text-up-01 p-2"></td>
+        <td class="text-center text-up-01 p-2"></td>
+        <td class="text-center text-up-01 p-2"></td>
+        <td class="text-center text-up-01 p-2 text-right text-up-02">Total R$</td>
+        <td class="text-center text-up-01 p-2">
+            <div class="br-input">
+                <input class="text-center" type="text" id="totalGeral" readonly name="total_geral">
+            </div>
+        </td>
+        <td class="text-center text-up-01 p-2"></td>
+    </tr>
+</template>
+
+<!--TEMPLATE LINHA ORDINARIA TABELA CALCULO DA ENTRADA-->
+<template id="id-linha-tabela-entrada">
+    <tr>
+        <td id="saldoDevedor" class="is-not-component" name="saldo_devedor_total"></td>
+        <td id="valorEntrada" class="is-not-component" name="valor_total_entrada"></td>
+        <td>
+            <div class="br-select">
+                <div class="br-input" role="combobox" aria-expanded="false" aria-controls="list-9329" aria-autocomplete="list">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </div>
+                        <input id="tipo943" type="text" placeholder="Selecione o item">
+                    </div>
+                    <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1"
+                        data-trigger="data-trigger" aria-controls="list-9329" aria-expanded="false">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="br-list" tabindex="-1" id="list-9329" role="listbox" aria-label="Lista de Opções">
+                    <!--Os itens serão preenchidos dinamicamente-->
+                </div>
+            </div>
+        </div>
+        </td>
+        <td id="parcelaAposEntrada" class="is-not-component" name="valor_parcela_entrada"></td>
+        <td>1124</td>
+    </tr>
+</template>
+
+<!--TEMPLATE LINHA ORDINARIA TABELA VALOR RESTANTE A PAGAR OU PARCELAR-->
+<template id="id-linha-tabela-restante">
+    <tr>
+        <td id="criterioTransacao" class="is-not-component" name="criterio_transacao"></td>
+        <td id="saldoParaCalculoRestante" class="is-not-component" name="saldo_devedor_apos_entrada"></td>
+        <td>
+            <div class="br-select">
+                <div class="br-input" role="combobox" aria-expanded="false" aria-controls="lista-restante" aria-autocomplete="list">
+                    <div class="input-group">
+                        <div class="input-icon">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </div>
+                        <input id="valor-restante" type="text" placeholder="Selecione o item">
+                    </div>
+                    <button class="br-button" type="button" aria-label="Exibir lista" tabindex="-1"
+                        data-trigger="data-trigger" aria-controls="lista-restante" aria-expanded="false">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="br-list" tabindex="-1" id="lista-restante" role="listbox" aria-label="Lista de Opções">
+                    <!--Os itens serão preenchidos dinamicamente-->
+                </div>
+            </div>
+        </div>
+        </td>
+        <td id="parcelaAposDesconto" class="is-not-component" name="valor_parcela_apos_desconto"></td>
+        <td>1124</td>
+    </tr>
+</template>
+
+<body class="d-flex flex-column" style="background-color: #f8f8f8; min-height: 100vh;">
+
+    <!--PRINCIPAL-->
+    <main class="flex-grow-1">
+
+        <!--HEADER-->
+        <section id="id-cabecalho" class="pagina1">
+        
+            <header class="br-header">
+                <div class="container-lg">
+        
+                    <!--TOP-->
+                    <div class="header-top">
+                        <div class="header-logo">
+                            <svg version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.7 134.9" style="enable-background:new 0 0 374.7 134.9;" xml:space="preserve">
+                                <style type="text/css">
+                                    .st0 {
+                                        fill: #2864AE;
+                                    }
+        
+                                    .st1 {
+                                        fill: #46AD44;
+                                    }
+        
+                                    .st2 {
+                                        fill: #FABD10;
+                                    }
+                                </style>
+                                <path class="st0" d="M40.1,84.7c8.9,0,16-7.5,16-18.7c0-8.1-4.8-17.2-16-17.2c-9.3,0-14.2,8.2-14.2,18.1C25.9,78.3,32.6,84.7,40.1,84.7zM80.4,95.5c0,29.8-14.5,39.4-43.8,39.4c-12,0-21.9-2.5-27.7-4.6l1.3-19.8c7.7,3.8,14.1,6,24.5,6c14.5,0,22.3-6.8,22.3-21.1v-3.9h-0.3c-6,8.5-14.4,12.4-24.4,12.4C12.4,104,0,88.9,0,67.4c0-21.6,10.2-37.8,32.8-37.8c10.7,0,19.4,5.9,24.7,14.8h0.3V31.3h22.7L80.4,95.5L80.4,95.5z" />
+                                <polygon class="st1" points="181.6,103.9 209.5,103.9 235.8,31.7 211.4,31.7 196.6,83.1 196.3,83.1 181.6,31.7 155.3,31.7 " />
+                                <path class="st2" d="M139,67.8c0-10.8-4.7-20.4-16.2-20.4c-11.5,0-16.2,9.6-16.2,20.4c0,10.7,4.7,20.2,16.2,20.2C134.3,88,139,78.5,139,67.8z M80.8,67.8c0-24,18.1-37.8,42-37.8s42,13.9,42,37.8c0,23.8-18.1,37.7-42,37.7C99,105.5,80.8,91.6,80.8,67.8z" />
+                                <path class="st0" d="M238.6,93.7c0,6.5-5.3,11.8-11.8,11.8c-6.5,0-11.8-5.3-11.8-11.8c0-6.5,5.3-11.8,11.8-11.8 C233.3,81.8,238.6,87.1,238.6,93.7z" />
+                                <path class="st0" d="M281,49.2c-9.1,0-15.2,8-15.2,18.8c0,10.5,6.9,18.4,15.2,18.4c9.4,0,15.1-7.9,15.1-19.4C296.1,57.5,290.7,49.2,281,49.2z M240.9,0h25.1v41h0.3c6.4-8,14.8-10.9,24.8-10.9c20,0,30.9,19,30.9,36.4c0,21.3-11.5,39.1-33,39.1c-11.5,0-21.6-6.5-24.8-14.6h-0.3v12.9h-23L240.9,0L240.9,0z" />
+                                <path class="st2" d="M373.4,51.7c-2.8-0.8-5.5-0.8-8.5-0.8c-11.6,0-18.1,8.4-18.1,22.6v30.5h-24.9V31.7h22.7V45h0.3c4.3-9.1,10.5-15,21.3-15c2.9,0,6,0.4,8.5,0.8L373.4,51.7z" />
+                            </svg>
+                        </div>
+                    </div>
+        
+                    <!--BOTTOM-->
+                    <div class="header-bottom">
+        
+                        <!--MENU-->
+                        <div class="header-menu">
+        
+                            <!--TITULOS-->
+                            <div class="header-info">
+                                <div class="header-title">Discriminativo Débitos Previdenciários - Transação até 50 milhões por contencioso</div>
+                                <div class="header-title">Edital de Transação nº 9, de 13 de julho de 2026</div>
+                                <div class="header-subtitle">Débitos Previdenciários – até R$ 50.000.000,00 (cinquenta milhões de reais) por contencioso</div>
+                            </div>
+        
+                        </div>
+        
+                    </div>
+                </div>
+            </header>
+
+        </section>
+
+        <!--IDENTIFICACAO DO CONTRIBUINTE-->
+        <section id="id-identificacao-do-contribuinte" class="secao container my-5 toPdf pagina1" name="identificacao-do-contribuinte">
+            <div class="row">
+                
+                <div class="col-12 text-center mb-5">
+                    <h2 class="text-up-04 text-weight-semi-bold" style="margin: 0;">DISCRIMINATIVO DÉBITOS PREVIDENCIÁRIOS – TRANSAÇÃO ATÉ 50 MILHÕES POR CONTENCIOSO</h4>
+                </div>
+
+                <!--OPCOES-->
+                <div class="col-12">
+                    <h1 class="mb-5">Identificação do Contribuinte</h1>
+
+                    <!--PESSOA NATURAL-->
+                    <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                        <input id="op-1" type="radio" name="contribuinte" value="op-1" onclick="reiniciarFormulario(this), identificacaoContribuinte(this)" data-contribuinte="pessoa-natural"/>
+                        <label for="op-1" class="text-up-02">Pessoa Natural</label>
+                    </div>
+
+                    <!--PESSOA NATURAL COM INDICATIVO DE OBITO-->
+                    <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                        <input id="op-2" type="radio" name="contribuinte" value="op-2" onclick="reiniciarFormulario(this), identificacaoContribuinte(this)" data-contribuinte="pessoa-obito"/>
+                        <label for="op-2" class="text-up-02">Pessoa Natural com indicativo de óbito</label>
+                    </div>
+
+                    <!--ME, EPP, SANTAS CASAS-->
+                    <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                        <input id="op-3" type="radio" name="contribuinte" value="op-3" onclick="reiniciarFormulario(this), identificacaoContribuinte(this)" data-contribuinte="me-epp"/>
+                        <label for="op-3" class="text-up-02">ME, EPP, Santas Casas de Misericórdia, Sociedades Cooperativas e demais organizações da sociedade civil de que trata a Lei nº 13.019, de 31 de julho de 2014 ou instituições de ensino</label>
+                    </div>
+
+                    <!--DEMAIS PJ-->
+                    <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                        <input id="op-4" type="radio" name="contribuinte" value="op-4" onclick="reiniciarFormulario(this), identificacaoContribuinte(this)" data-contribuinte="demais-pj"/>
+                        <label for="op-4" class="text-up-02">Demais PJ</label>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!--DEMAIS OPCOES ME, EPP, DEMAIS PJ-->
+        <section id="id-opcoes-contribuintes" class="secao container mb-5 toPdf pagina1 d-none" name="opcoes-contribuintes">
+            <div class="row">
+
+                <div id="id-demais-opcoes-contribuintes" class="col-12" >
+
+                    <div class="br-checkbox mb-3xh">
+                        <input id="falido" name="falidos" type="checkbox" aria-label="opção 1" class="contribuinte" onclick="reiniciarFormulario(this), definirCondicaoContribuinte(this)"  data-condicao="falido"/>
+                        <label for="falido" class="text-up-01">Falidos, em recuperação judicial, em recuperação extrajudicial, em liquidação judicial, em intervenção ou liquidação extrajudicial</label>
+                    </div>
+                    <div class="br-checkbox mb-3xh">
+                        <input id="baixado" name="baixado" type="checkbox" aria-label="opção 1" class="contribuinte" onclick="reiniciarFormulario(this), definirCondicaoContribuinte(this)"  data-condicao="baixado">
+                        <label for="baixado" class="text-up-01">Baixado por inaptidão, Baixado por inexistência de fato, Baixado por omissão contumaz, Baixado por encerramento da falência, Baixado pelo encerramento da liquidação judicial, Baixado pelo encerramento da liquidação, Inapto por localização desconhecida, Inapto por inexistência de fato, Inapto omisso e não localização, Inapto por omissão contumaz, Inapto por omissão de declarações, Suspenso por inexistência de fato</label>
+                    </div>
+                    <div class="br-checkbox mb-3xh">
+                        <input id="grupoEconomico" name="grupo_economico" type="checkbox" aria-label="opção 1" onclick="definirCondicaoContribuinte(this)"  data-condicao="grupoEconomico" class="contribuinte">
+                        <label for="grupoEconomico" class="text-up-01">Contribuinte integra grupo econômico, de direito ou de fato, reconhecido ou não em decisão administrativa ou judicial?</label>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!--DETALHAMENTO DOS CREDITOS TRIBUTARIOS-->
+        <section id="id-detalhamento-creditos-tributarios" class="secao container mb-5 toPdf pagina2 d-none" name="detalhamento-creditos-tributarios">
+            <h1 class="mt-5">Detalhamento dos Créditos Tributários Previdenciários (débitos) em Contencioso Administrativo Fiscal</h1>
+
+            <div class="row">
+
+                <!--TABELA-->
+                <div class="col-12">
+                    <div class="br-table" data-random="data-random">
+
+                        <table class="obrigatorio">
+                            <caption>Detalhamento dos Créditos Previdenciários</caption>
+                            <thead>
+                                <tr>
+                                    <th id="nprocesso" class="text-center text-up-01 p-2 col-2">Nº Processo</th>
+                                    <th id="valor-principal" class="text-center text-up-01 p-2 col-2">Valor Principal (R$)</th>
+                                    <th id="multa" class="text-center text-up-01 p-2 col-2">Multa (R$)</th>
+                                    <th id="juros" class="text-center text-up-01 p-2 col-2">Juros (R$)</th>
+                                    <th class="text-center text-up-01 p-2 col-2">Valor total do Processo (R$)</th>
+                                    <th class="text-center text-up-01 p-2 col acoes">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaDebitosBody"></tbody> <!-- A tabela será preenchida dinamicamente com JavaScript -->
+                        </table>
+                    </div>
+                </div>
+
+                <!--BOTOES INCLUIR NOVO DEBITO E CONFIRMAR TOTAL DE DEBITOS-->
+                <div class="col-12 my-5 text-center d-flex justify-content-around">
+                    <div>
+                        <button id="btnIncluirNovoDebito" onclick="incluirNovoDebito()" class="br-button secondary">Incluir novo débito</button>
+                    </div>
+                    <div>
+                    <button id="btnConfirmarTotalDebitos" onclick="confirmarTotalDebitos(this)" class="br-button primary">Confirmar total de débitos</button>
+                </div>
+            </div>
+
+        </section>
+
+        <!--CLASSIFICACAO DOS DEBITOS-->
+        <section id="id-classificacao-debitos" class="secao container mb-5 toPdf pagina3 d-none" name="classificao-debitos">
+            <h1 class="mt-5">Classificação dos Débitos e Cálculo do Desconto Teórico</h1>
+            <div class="row">
+                <div class="col-12">
+    
+                    <!--TABELA CAPACIDADE DE PAGAMENTOS-->
+                    <div class="br-table">
+                        <div>
+                            <table id="tabelaCapacidadePagamentos" class="mb-5">
+                                <tbody id="tabelaCapacidadePagamentosBody">
+                                    <tr>
+                                        <td class="text-right text-up-01">Total de débitos (R$)</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="totalDebitos" readonly name="total_debitos">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Total de débitos que deseja Transacionar (R$)</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="totalDebitosTransacionar" readonly name="total_debitos_transacionar">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Valor total da dívida na PGFN e RFB (R$) <span class="text-up-07">*</span></td>
+                                        <td class="col-2">
+                                            <div class="br-input obrigatorio">
+                                                <input type="text" class="text-center" id="totalDebitosNaoContencioso" oninput="validarValorNaoNegativo(this)" onchange="calcularRating(this)" name="total_debitos_nao_contencioso">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Capacidade de pagamento em 60 meses (R$) <span class="text-up-07">*</span></td>
+                                        <td class="col-2">
+                                            <div class="br-input obrigatorio">
+                                                <input type="text" class="text-center" id="caPag" oninput="validarValorNaoNegativo(this)" onchange="calcularRating(this)" name="capacidade_pagamento">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Relação Total de débitos / Capag</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="relacaoDebitosCaPag" readonly onchange="preencheSecaoClassificacaoDebitos()" name="relacao_debitos_capag">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Desconto Teórico</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="descontoTeorico" readonly name="desconto_teorico">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Rating</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="rating" readonly name="rating">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                
+                            </table>
+
+                            <div>
+                                <span class="text-up-07">*</span><span class="text-up-02"> Obtenha essas informações no site <a href="https://www.regularize.pgfn.gov.br/" target="_blank">Regularize.</a> Clique para acessar.</span>
+                            </div>
+                            <div class="mb-5">
+                                <span class="text-up-01">Caso não concorde com a capacidade de pagamento, é possível apresentar pedido de revisão pelo <a href="https://www.regularize.pgfn.gov.br/" target="_blank">Regularize</a> da Procuradoria-Geral da Fazenda Nacional, nos termos da Portaria PGFN nº 6.757/2022</span>
+                            </div>
+
+                            <!--BOTÃO SELECIONAR MODALIDADE DE TRANSACAO-->
+                            <div class="d-flex justify-content-end">
+                                <button id="btnSelecionarModalidade" class="br-button primary" onclick="selecionarModalidade(this)">Selecionar modalidade</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!--MODALIDADE DE TRANSACAO-->
+        <section id="id-modalidade-transacao" class="secao container mb-5 toPdf pagina4 d-none" name="modalidade-transacao">
+            
+            <h1 class="mt-5">Selecione a Modalidade de Transação</h1>
+            <div class="row" id="radiosModalidadeTransacao">
+
+            <!--PESSOA NATURAL-->
+            <div>
+                <!--RATING A OU B PESSOA NATURAL-->
+                <div class="col-12 d-none" id="id-ab-pessoa-natural">
+                    <p class="text-weight-semi-bold">Opções para ratings A ou B para Pessoa Natural</p>
+                    <div class="form-check my-3">
+                        <div class="my-3xh">
+                            <div class="br-radio">
+                                <input id="radio-ab-pessoa-natural" type="radio" name="rating-ab-pessoa-natural" onclick="reiniciarFormulario(this), popularTabelaEntrada(this), popularTabelaRestante(this)">
+                                <label for="radio-ab-pessoa-natural" class="text-up-02"><strong>Item 6.5 -</strong> Entrada no valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--RATING C OU D PESSOA NATURAL-->
+                <div class="col-12 d-none" id="id-cd-pessoa-natural">
+                    <p class="text-weight-semi-bold">Opções para rating C ou D para Pessoa Natural</p>
+                    <div class="form-check my-3">
+                        <div class="my-3xh">
+                            <div class="my-3xh">
+                                <!--Preenchido via JS-->
+                                <p id="explicacao-pn-rating-cd"></p>
+                            </div>
+                            <div class="br-radio">
+                                <input id="radio-cd-pessoa-natural" type="radio" name="rating-cd-pessoa-natural" onclick="reiniciarFormulario(this), popularTabelaDescontos(this), popularTabelaEntrada(this), popularTabelaRestante(this)">
+                                <label for="radio-cd-pessoa-natural" class="text-up-02"><strong>Item 6.3 -</strong> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, <b>antes dos descontos</b>, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--PESSOA OBITO SEMPRE RATING D-->
+            <div class="col-12 d-none" id="id-d-pessoa-obtito">
+                <p class="text-weight-semi-bold">Opções para rating D Pessoa Natural com indicativo de óbito</p>
+                <div class="form-check my-3">
+                    <div class="my-3xh">
+                        <div class="my-3xh">
+                            <!--Preenchido via JS-->
+                            <p id="explicacao-po-rating-d"></p>
+                        </div>
+                        <div class="br-radio">
+                            <input id="radio-d-pessoa-obito" type="radio" name="rating-d-pessoa-obito" onclick="reiniciarFormulario(this), popularTabelaDescontos(this), popularTabelaEntrada(this), popularTabelaRestante(this)">
+                            <label for="radio-d-pessoa-obito" class="text-up-02"><b>Item 6.3 -</b> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, <b>antes dos descontos</b>, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--ME, EPP, SANTAS CASAS (SEM CHECKBOX MARCADO)-->
+            <div>
+                <!--RATING A OU B-->
+                <div class="col-12 d-none" id="id-ab-me-epp-not-check">
+                    <p class="text-weight-semi-bold">Opções para rating A ou B de acordo com o contribuinte</p>
+                    <div class="form-check my-3">
+                        <div class="my-3xh">
+                            <div class="br-radio">
+                                <input id="radio-ab-me-epp-no-check2" type="radio" name="rating-ab-me-epp-no-check" onclick="popularTabelaEntrada(this), popularTabelaRestante(this)">
+                                <label for="radio-ab-me-epp-no-check2" class="text-up-02"><b>Item 6.5 -</b> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--RATING C OU D-->
+                <div class="col-12 d-none" id="id-cd-me-epp-not-check">
+                    <p class="text-weight-semi-bold">Opções para rating C ou D de acordo com o contribuinte</p>
+                    <div class="form-check my-3">
+                        <div class="my-3xh">
+                            <div class="my-3xh">
+                                <!--Preenchido via JS-->
+                                <p id="explicacao-meepp-rating-cd"></p>
+                            </div>
+
+                            <!--SEM PREJUIZO FISCAL-->
+                            <div class="br-radio">
+                                <input id="radio-cd-me-epp-no-check1" type="radio" name="rating-c-me-epp-no-check" onclick="reiniciarFormulario(this), popularTabelaDescontos(this), popularTabelaEntrada(this), popularTabelaRestante(this)" data-prejuizo="false">
+                                <label for="radio-cd-me-epp-no-check1" class="text-up-02"><b>Item 6.3 -</b> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, <b>antes dos descontos</b>, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                            </div>
+
+                            <!--COM PREJUIZO FISCAL-->
+                            <div class="br-radio">
+                                <input id="radio-cd-me-epp-no-check2" type="radio" name="rating-c-me-epp-no-check" onclick="reiniciarFormulario(this), document.querySelector('#id-detalhamentos-pf-bcn').classList.remove('d-none')" data-prejuizo="true">
+                                <label for="radio-cd-me-epp-no-check2" class="text-up-02"><b>Item 6.3 -</b> No caso de uso de créditos decorrentes de prejuízo fiscal e base de cálculo negativa da CSLL, pagamento de no mínimo <b>5% (cinco por cento)</b> do valor da dívida, <b>antes dos descontos</b>, em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante com o uso desses créditos, apurados até 31 de dezembro de 2025, limitados a <b>30% (trinta por cento)</b>  do saldo devedor da dívida (após aplicação do desconto e valor da entrada) para amortizar principal, multas, juros e encargos legais e o saldo remanescente dividido em <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--ME, EPP, SANTAS CASAS (CHECKBOX MARCADO) SEMPRE RANTING D-->
+            <div class="col-12 d-none" id="id-d-me-epp-check">
+                <p class="text-weight-semi-bold">Opções para rating C ou D de acordo com o contribuinte</p>
+                <div class="form-check my-3">
+                    <!--Explicação-->
+                    <div class="my-3xh">
+                        <!--Preenchido via JS-->
+                        <p id="explicacao-meepp-rating-d-checked"></p>
+                    </div>
+
+                    <div class="my-3xh">
+                        <!--Sem utilização prejuízo fiscal-->
+                        <div class="br-radio">
+                            <input id="radio-d-me-epp-check1" type="radio" name="rating-d-me-epp-checked" onclick="reiniciarFormulario(this), popularTabelaDescontos(this), popularTabelaEntrada(this), popularTabelaRestante(this)" data-prejuizo="false">
+                            <label for="radio-d-me-epp-check1" class="text-up-02"><b>Item 6.3 -</b> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, <b>antes dos descontos</b>, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                        </div>
+                        <!--Com utilização prejuízo fiscal-->
+                        <div class="br-radio">
+                            <input id="radio-d-me-epp-check2" type="radio" name="rating-d-me-epp-checked" onclick="reiniciarFormulario(this), document.querySelector('#id-detalhamentos-pf-bcn').classList.remove('d-none')" data-prejuizo="true">
+                            <label for="radio-d-me-epp-check2" class="text-up-02"><b>Item 6.3 -</b> No caso de uso de créditos decorrentes de prejuízo fiscal e base de cálculo negativa da CSLL, pagamento de no mínimo <b>5% (cinco por cento)</b> do valor da dívida, <b>antes dos descontos</b>, em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante com o uso desses créditos, apurados até 31 de dezembro de 2025, limitados a <b>30% (trinta por cento)</b>  do saldo devedor da dívida (após aplicação do desconto e valor da entrada) para amortizar principal, multas, juros e encargos legais e o saldo remanescente dividido em <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--DEMAIS PJ (SEM CHECKBOX MARCADO)-->
+            <div>
+                <!--RATING A OU B-->
+                <div class="col-12 d-none" id="id-ab-demais-pj-no-check">
+                    <p class="text-weight-semi-bold">Opções para rating A ou B de acordo com o contribuinte</p>
+                    <div class="form-check my-3">
+                        <div class="my-3xh">
+                            <div class="br-radio">
+                                <input id="radio-ab-demais-pj-check1" type="radio" name="rating-ab-demais-no-check" onclick="popularTabelaEntrada(this), popularTabelaRestante(this)">
+                                <label for="radio-ab-demais-pj-check1" class="text-up-02"><b>Item 6.5 -</b> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, paga em até <b>10 (dez)</b> prestações mensais e sucessivas, e o restante em <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--RATING C OU D-->
+                <div class="col-12 d-none" id="id-cd-demais-pj-no-check">
+                    <p class="text-weight-semi-bold">Opções para rating C ou D de acordo com o contribuinte</p>
+                    <div class="form-check my-3">
+                        <div class="my-3xh">
+                            <!--Texto explicativo-->
+                            <div class="my-3xh">
+                                <!--Preenchido via JS-->
+                                <p id="explicacao-demais-pj-rating-cd"></p>
+                            </div>
+                            <!--Sem utilização de prejuízo fiscal-->
+                            <div class="br-radio">
+                                <input id="radio-cd-demais-pj-no-check1" type="radio" name="rating-cd-demais-pj-no-check" onclick="reiniciarFormulario(this), popularTabelaDescontos(this), popularTabelaEntrada(this), popularTabelaRestante(this)" data-prejuizo="false">
+                                <label for="radio-cd-demais-pj-no-check1" class="text-up-02"><b>Item 6.3 -</b> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, <b>antes dos descontos</b>, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                            </div>
+                            <!--Com utilização de prejuízo fiscal-->
+                            <div class="br-radio">
+                                <input id="radio-cd-demais-pj-no-check2" type="radio" name="rating-cd-demais-pj-no-check" onclick="reiniciarFormulario(this), document.querySelector('#id-detalhamentos-pf-bcn').classList.remove('d-none')" data-prejuizo="true">
+                                <label for="radio-cd-demais-pj-no-check2" class="text-up-02"><b>Item 6.3 -</b> No caso de uso de créditos decorrentes de prejuízo fiscal e base de cálculo negativa da CSLL, pagamento de no mínimo <b>5% (cinco por cento)</b>do valor da dívida, <b>antes dos descontos</b>, em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante com o uso desses créditos, apurados até 31 de dezembro de 2025, limitados a <b>30% (trinta por cento)</b>  do saldo devedor da dívida (após aplicação do desconto e valor da entrada) para amortizar principal,  multas, juros e encargos legais e o saldo remanescente dividido em <b>50 (cinquenta )</b> prestações mensais e sucessivas.</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!--DEMAIS PJ (CHECKBOX MARCADO)-->
+            <div class="col-12 d-none" id="id-d-demais-pj-check">
+                <p class="text-weight-semi-bold">Opções para rating D de acordo com o contribuinte</p>
+                <div class="form-check my-3">
+                    <div class="my-3xh">
+                        <!--Texto explicativo-->
+                        <div class="my-3xh">
+                            <!--Preenchido via JS-->
+                            <p id="explicacao-demais-pj-check"></p>
+                        </div>
+                        <!--Sem utilização do prejuízo fiscal-->
+                        <div class="br-radio">
+                            <input id="radio-d-demais-pj-check1" type="radio" name="rating-d-demais-pj-check" onclick="reiniciarFormulario(this), popularTabelaDescontos(this), popularTabelaEntrada(this), popularTabelaRestante(this)" data-prejuizo="false">
+                            <label for="radio-d-demais-pj-check1" class="text-up-02"><b>Item 6.3 -</b> Entrada de valor equivalente a <b>5% (cinco por cento)</b> do valor consolidado da dívida, <b>antes dos descontos</b>, paga em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante em até <b>50 (cinquenta)</b> prestações mensais e sucessivas.</label>
+                        </div>
+                        <!--Com utilização do prejuízo fiscal-->
+                        <div class="br-radio">
+                            <input id="radio-d-demais-pj-check2" type="radio" name="rating-d-demais-pj-check" onclick="reiniciarFormulario(this), document.querySelector('#id-detalhamentos-pf-bcn').classList.remove('d-none')" data-prejuizo="true">
+                            <label for="radio-d-demais-pj-check2" class="text-up-02"><b>Item 6.3 -</b> No caso de uso de créditos decorrentes de prejuízo fiscal e base de cálculo negativa da CSLL, pagamento de no mínimo <b>5% (cinco por cento)</b> do valor da dívida, <b>antes dos descontos</b>, em até <b>10 (dez)</b> prestações mensais e sucessivas e o restante com o uso desses créditos, apurados até 31 de dezembro de 2025, limitados a <b>30% (trinta por cento)</b> do saldo devedor da dívida (após aplicação do desconto e valor da entrada) para amortizar principal, multas, juros e encargos legais e o saldo remanescente dividido em <b>50 (cinquenta )</b> prestações mensais e sucessivas.</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!--DETALHAMENTO DO PREJUIZO FISCAL E BASE DE CALCULO NEGATIVA-->
+        <section id="id-detalhamentos-pf-bcn" class="secao container mb-5 pagina5 toPdf d-none" name="detalhamento-prejuizo-fiscal-bcn">
+            <h1 class="mt-5">Detalhamento dos Prejuízos Fiscais e Base de Cálculo Negativa da CSLL a serem utilizados</h1>
+            <div class="row">
+                <div class="col-12">
+                    <div class="br-table">
+                        <table id="tabela-calculo-pf-bcn">
+                            <caption>Tabela Cálculo dos Prejuízos Fiscais e Base de Cálculo Negativa da CSLL</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-up-01 col-3">Montante de Prejuízo Fiscal a ser utilizado (R$)</th>
+                                    <th class="text-up-01 col-2">Alíquota do Prejuízo Fiscal (%)</th>
+                                    <th class="text-up-01 col-3">Montante de Base de Cálculo Negativa da CSLL a ser utilizada (R$)</th>
+                                    <th class="text-up-01 col-2">Alíquota da Base de Cálculo Negativa (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bd-tabela-calculo-pf-bcn">
+                                <tr>
+                                    <!--MONTANTE PREJUIZO FISCAL-->
+                                    <td class="text-center p-2">
+                                        <div class="br-input obrigatorio-talvez">
+                                            <input id="montante-pf" class="text-center" type="text" oninput="handleValidarValorNaoNegativo(this), reiniciarFormulario(this)" name="montante_prejuizo_fiscal">
+                                        </div>
+                                    </td>
+
+                                    <!--ALIQUOTA PREJUIZO FISCAL-->
+                                    <td class="text-center p-2">
+                                        <div class="br-input obrigatorio-talvez">
+                                            <input id="aliquota-pf" class="text-center" type="text" oninput="validarPercentual(this), reiniciarFormulario(this)" name="aliquota_prejuizo_fiscal">
+                                        </div>
+                                    </td>
+
+                                    <!--MONTANTE BASE DE CALCULO NEGATIVA CSLL-->
+                                    <td class="text-center p-2">
+                                        <div class="br-input obrigatorio-talvez">
+                                            <input id="montante-bcn" class="text-center" type="text" oninput="handleValidarValorNaoNegativo(this), reiniciarFormulario(this)" name="montante_base_calculo_negativa">
+                                        </div>
+                                    </td>
+
+                                    <!--ALIQUOTA BASE DE CALCULO NEGATIVA CSLL-->
+                                    <td class="text-center p-2">
+                                        <div class="br-input obrigatorio-talvez">
+                                            <input id="aliquota-bcn" class="text-center" type="text" oninput="validarPercentual(this), reiniciarFormulario(this)" name="aliquota_base_calculo_negativa">
+                                        </div>
+                                    </td>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!--BOTAO PROSSEGUIR-->
+                    <div class="text-center my-3xh">
+                        <button onclick="reiniciarFormulario(this), prosseguir()" class="br-button primary">Prosseguir</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--DETALHAMENTO DOS DESCONTOS APLICADOS-->
+        <section id="id-detalhamentos-descontos" class="secao container mb-5 pagina6 toPdf d-none" name="detalhamento-descontos">
+            <h1 class="mt-5">Detalhamento dos Descontos Aplicados aos Débitos Previdenciários</h1>
+            <div class="row">
+                <div class="col-12">
+                    <div class="br-table">
+                        <table id="tabela-calculo-descontos">
+                            <caption>Tabela Cálculo da Descontos</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-up-01 col-2">Nº processo</th>
+                                    <th class="text-up-01 col-1">Principal (R$)</th>
+                                    <th class="text-up-01 col-1">Multa (R$)</th>
+                                    <th class="text-up-01 col-1">Juros (R$)</th>
+                                    <th class="text-up-01 col-1">Total (R$)</th>
+                                    <th class="text-up-01 col-1">Desconto máximo permitido</th>
+                                    <th class="text-up-01 col-1 d-none">Desconto calculado</th>
+                                    <th class="text-up-01 col-1">Desconto obtido</th>
+                                    <th class="text-up-01 col-1">Saldo devedor (R$)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bd-tabela-calculo-descontos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--DETALHAMENTO DA ENTRADA-->
+        <section id="id-detalhamento-entrada" class="secao container mb-5 pagina7 toPdf d-none" name="detalhamento-entrada">
+            <h1 class="mt-5">Detalhamento da entrada</h1>
+            <div class="row">
+                <div class="col-12">
+                    <div class="br-table">
+                        <table id="tabela-calculo-entrada">
+                            <caption>Tabela Cálculo da Entrada</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-up-01 col-2" id="entrada-rating-a-b">Total devido (R$)</th>
+                                    <th class="text-up-01 col-2 d-none" id="entrada-rating-c-d">Total devido antes dos descontos (R$)</th>
+                                    <th class="text-up-01 col-2">Entrada (R$)</th>
+                                    <th class="text-up-01 col-2">Nº parcelas da entrada</th>
+                                    <th class="text-up-01 col-2">Valor da parcela (R$)</th>
+                                    <th class="text-up-01 col-2">Código do Darf</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bd-tabela-calculo-entrada"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--DETALHAMENTO DA UTILIZACAO PF E BCN-->
+        <section id="id-detalhamento-utilizacao-pf-bcn" class="secao container mb-5 pagina8 toPdf d-none" name="detalhamento-utilizacao-pf-bcn">
+            <h1 class="mt-5">Detalhamento da utilização de Prejuízo Fiscal e Base de Cálculo Negativa da CSLL</h1>
+            <div class="row">
+                <div class="col-12">
+                    <div class="br-table">
+                        <table id="tabela-calculo-utilizacao-pf-bcn">
+                            <caption>Tabela Detalhamento da utilização de Prejuízo Fiscal e Base de Cálculo Negativa da CSLL</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-up-01 col-2">Saldo Devedor (R$)</th>
+                                    <th class="text-up-01 col-2" id="id-linha-limite-mje">Limite PF/BCN (30%)</th>
+                                    <th class="text-up-01 col-2">Abatimento proposto (R$)</th>
+                                    <th class="text-up-01 col-1">Abatimento aplicado (R$)</th>
+                                    <th class="text-up-01 col-1">Saldo a pagar (R$)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bd-tabela-calculo-utilizacao-pf-bcn"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!--DETALHAMENTO DO VALOR RESTANTE A PAGAR OU PARCELAR-->
+        <section id="id-detalhamento-restante" class="secao container mb-5 toPdf pagina9 d-none" name="detalhamento-restante">
+            <h1 class="mt-5">Detalhamento do Valor Restante a Pagar ou Parcelar</h1>
+            <div class="row">
+                <div class="col-12">
+                    <div class="br-table">
+                        <table id="tabela-calculo-entrada">
+                            <caption>Tabela Cálculo do Restante a Pagar ou Parcelar</caption>
+                            <thead>
+                                <tr>
+                                    <th class="text-up-01 col-2">Critério de Transação</th>
+                                    <th class="text-up-01 col-2">Saldo a pagar (R$)</th>
+                                    <th class="text-up-01 col-2">Nº parcelas</th>
+                                    <th class="text-up-01 col-2">Valor da parcela após desconto (R$)</th>
+                                    <th class="text-up-01 col-2">Código do Darf</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bd-tabela-calculo-restante"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!--INFORMACOES ADICIONAIS-->
+                <div class="col-12 my-10x">
+                    <p class="text-danger text-up-02">O pagamento da primeira ou única parcela da entrada deverá ser realizado até o último dia útil do mês do requerimento da adesão. As demais parcelas da entrada, quando houver, deverão ser pagas até o último dia útil dos meses subsequentes</p>
+                    <p class="text-danger text-up-02">A primeira parcela deverá ser paga até o último dia útil do mês subsequente ao mês do vencimento da útlima parcela da entrada e as demais parcelas serem pagas até o último dia útil dos meses subsequentes ao mês de vencimento da parcela anterior</p>
+                    <p class="text-danger text-up-02">O valor de cada parcela, inclusive da parcela mínima, será acrescido de juros equivalentes à taxa referencial do Sistema Especial de Liquidação e de Custódia (Selic) para títulos federais, acumulada mensalmente, calculados a partir do mês subsequente ao da consolidação até o mês anterior ao do pagamento, e de 1% (um por cento) relativamente ao mês em que o pagamento estiver sendo efetuado.</p>
+                </div>
+            </div>
+        </section>
+
+        <!--GERAR DOCUMENTO-->
+        <section id="id-btn-gerar-documento" class="container mb-5 d-none" name="gerar_documento">
+            <div class="row justify-content-between">
+                <div class="col text-center my-3">
+                    <button onclick="gerarDocumento()" class="br-button primary">Gerar Documento</button>
+                </div>
+            </div>
+            <div class="row justify-content-between">
+                <div id="id-aguardar" class="col text-center br-loading d-none" role="progressbar" aria-label="Gerando documento PDF">Aguarde</div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL -->
+    <div class="br-scrim-util foco" id="modal-scrim" data-scrim="true">
+        <div class="div br-modal medium" id="id-modal-generico" aria-modal="true" role="dialog"
+            aria-labelledby="modal-generico">
+
+            <!--HEADER-->
+            <div class="br-modal-header">
+                <div class="modal-title" id="id-modal-generico-titulo">Mensagem</div>
+                <button class="br-button close circle" type="button" data-dismiss="true" aria-label="Fechar">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <!--BODY-->
+            <div class="br-modal-body">
+                <p id="id-elemento-mensagem"></p>
+            </div>
+
+            <!--FOOTER-->
+            <div class="br-modal-footer justify-content-end">
+                <button id="id-entendi" class="br-button primary" type="button" data-dismiss="true">Entendi</button>
+            </div>
+        </div>
+    </div>
+
+    <!--FOOTER-->
+    <section id="id-rodape" class="mt-5xh">
+        <br-footer>
+            <footer role="contentinfo" aria-label="Footer" class="br-footer">
+                <div class="container">
+                    <div class="logo text-sm-left">
+                        <img alt="govbr" src="assets/img/logo_govbr_branco.png">
+                    </div>
+                    <section aria-label="Redes Sociais" class="d-sm-block secondary-info">
+                        <div class="row align-items-end justify-content-between py-5">
+                            <div role="list" class="col assigns text-right">
+                                <span class="sr-only">Parceiros</span>
+                                <a role="listitem" target="_blank" class="ml-4 partner"
+                                    href="https://www.gov.br/receitafederal/pt-br" aria-label="Receita Federal">
+                                    <img alt="receitafederal" src="assets/img/logo_rfb_branco.png">
+                                </a>
+                                <!-- <a role="listitem" target="_blank" class="ml-4 partner"
+                                    href="https://www.gov.br/empresas-e-negocios/pt-br/redesim"
+                                    aria-label="Empresas &amp; Negócios">
+                                    <img alt="redesim" src="assets/img/logo_redesim_branco.svg">
+                                </a> -->
+                                <a role="listitem" target="_blank" class="ml-4 partner"
+                                    href="https://www.gov.br/acessoainformacao/pt-br" aria-label="Acesso à Informação">
+                                    <img alt="acessoainformacao" src="assets/img/logo_acesso_informacao.png">
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+                <section aria-label="Informações Legais" class="container-fluid">
+                    <span class="br-divider my-3"></span>
+                    <div class="info">
+                        <div class="text-down-01 text-medium pb-3">Versão 1.0.0 - Termo de uso e Política de Privacidade
+                        </div>
+                    </div>
+                </section>
+            </footer>
+        </br-footer>
+    </section>
+
+</body>
+
+</html>

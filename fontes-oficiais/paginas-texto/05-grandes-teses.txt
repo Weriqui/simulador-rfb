@@ -1,0 +1,128 @@
+## Transação de Grandes Teses
+
+## Quem pode aderir
+
+Podem aderir ao Edital de Transação Conjunto PGFN/RFB n° 4/2026 os contribuintes com débitos da controvérsia relativa à incidência do Imposto de Renda Retido na Fonte (IRRF) sobre ganhos de capital e outros rendimentos de investidores não residentes, desde que exista, na data da adesão, discussão administrativa ou judicial pendente de julgamento definitivo. 
+
+Já para o Edital de Transação Conjunto PGFN/RFB n° 5/2026 podem aderir contribuintes que possuem  débitos em contencioso administrativo ou judicial decorrentes de discussões sobre a aplicabilidade e os limites das multas substitutivas da pena de perdimento do art. 23 do Decreto-Lei nº 1.455, de 7 de abril de 1976 e do art. 33 da Lei nº 11.488, de 15 de junho de 2007, decorrentes da impossibilidade de apreensão de mercadorias importadas, lançadas por interposição fraudulenta de terceiros ou por cessão de nome, mesmo que aplicadas a partir de um conjunto de indícios que demonstrem a inexistência da operação ostensiva.
+
+Em ambos casos também podem ser incluídas multas associadas à controvérsia, inclusive multas qualificadas, que receberão os mesmos descontos aplicáveis ao débitos principal.
+
+## Quais débitos podem ser negociados
+
+São elegíveis os débitos em contencioso administrativo fiscal, ou seja, aqueles em que já tenha sido apresentada impugnação, manifestação de inconformidade ou recurso com efeito suspensivo da exigibilidade do crédito tributário.
+
+### Confira se seu débito pode ser negociado
+
+Acesse o roteiro "Como consultar pendências" e consulte os critérios de elegibilidade.
+
+## Condições de pagamento
+
+### Condições gerais
+
+ | Opção
+ | Desconto sobre o débito
+ | Entrada mínima
+ | Parcelas mensais após a entrada
+ | Total máximo de prestações
+
+ | I
+ | 65%
+ | 30%
+ | Até 12
+ | 13
+
+ | II
+ | 55%
+ | 25%
+ | Até 24
+ | 25
+
+ | III
+ | 45%
+ | 20%
+ | Até 36
+ | 37
+
+ | IV
+ | 35%
+ | 15%
+ | Até 48
+ | 49
+
+ | V
+ | 25%
+ | 10%
+ | Até 60
+ | 61
+
+ Após a aplicação do desconto, poderá ser utilizado crédito de prejuízo fiscal
+ do IRPJ e de base de cálculo negativa da CSLL para quitar até 30% do saldo
+ remanescente, observadas as condições previstas no edital.
+
+### Débitos constituídos nos termos da Portaria RFB nº 568/2025
+
+ | Opção
+ | Desconto sobre o débito
+ | Entrada mínima
+ | Parcelas mensais após a entrada
+ | Total máximo de prestações
+
+ | I
+ | 40%
+ | 30%
+ | Até 12
+ | 13
+
+ | II
+ | 20%
+ | 25%
+ | Até 24
+ | 25
+
+ | III
+ | 5%
+ | 20%
+ | Até 36
+ | 37
+
+### Faça uma simulação das condições de pagamento
+
+Acesse o Simulador de Transação Tributária para conhecer as condições de pagamento aplicáveis ao seu caso, comparar as opções disponíveis e identificar a opção mais adequada à sua situação.
+
+## Informações importantes
+
+- Para débitos administrados pela Receita Federal, a entrada deve ser paga até o último dia útil do mês do requerimento de adesão.
+
+- O valor mínimo da parcela é R$ 500,00.
+
+- Antes da consolidação, o pagamento é feito por Darf código 1124, depois da consolidação, o Darf é emitido na modalidade negociada.
+
+- O valor de cada prestação será acrescido de juros correspondente à taxa Selic acumulada desde o mês seguinte ao da consolidação do parcelamento até o mês anterior ao pagamento, além de 1% (um por cento) referente ao mês em que a parcela for paga.
+
+- Os depósitos existentes vinculados aos débitos objeto da transação serão automaticamente convertidos em renda da União, e as condições de pagamento serão aplicadas sobre o saldo remanescente. 
+
+- O prazo de adesão é até às 19h, horário de Brasília, do dia 29 de dezembro de 2026.
+
+## Consequências da adesão
+
+O contribuinte que aderir à transação:
+
+- Desiste das impugnações e dos recursos administrativos ou judiciais relativos aos débitos negociados.
+
+- Renuncia às alegações de direito que fundamentam essas impugnações ou recursos.
+
+- Confessa, de forma irrevogável e irretratável, os débitos incluídos na transação.
+
+- Aceita integralmente as condições previstas no edital e na legislação aplicável.
+
+A apresentação do pedido de adesão não implica, por si só, a desistência do contencioso. A desistência e a renúncia tornam-se efetivas somente com o deferimento da transação.
+
+### Não encontrou a resposta que procurava?
+
+Acesse o Perguntas e Respostas e confira as respostas para as dúvidas mais frequentes sobre a transação.
+
+## LINKS
+- ["Como consultar pendências"](https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/publicacoes/guias-e-roteiros/transacao-tributaria/como-consultar-pendencias.pdf/view)
+- [Simulador de Transação Tributária](https://www.gov.br/receitafederal/pt-br/assuntos/transacao-tributaria/simular-transacao)
+- [Perguntas e Respostas](https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/perguntas-frequentes/transacao-tributaria/transacao-tributaria-sobre/transacao-tributaria)

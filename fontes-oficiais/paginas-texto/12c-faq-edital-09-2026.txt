@@ -1,0 +1,381 @@
+Fonte: https://www.gov.br/receitafederal/pt-br/acesso-a-informacao/perguntas-frequentes/transacao-tributaria/edital-de-transacao-por-adesao-rfb-no-09-2026
+Extraído em: 2026-11-11T01:20:28.759Z (Chrome via testes/gravar-sessao.js; conteúdo integral dos acordeões (div.conteudo) lido do DOM; perguntas numeradas na ordem da página)
+Título da página: Edital de Transação por Adesão RFB nº 09/2026 — Receita Federal
+
+# Edital de Transação por Adesão RFB nº 09/2026
+
+## 1. O que é o Edital de Transação 09/2026?
+
+O Edital RFB nº 9/2026 oferece às pessoas físicas e jurídicas a possibilidade de negociar créditos tributários em contencioso administrativo fiscal sob gestão da Secretaria Especial da Receita Federal do Brasil (RFB), cujo valor seja de até R$ 50.000.000,00 (cinquenta milhões de reais) por contencioso.
+
+A transação permite o pagamento dos créditos tributários em condições diferenciadas, de acordo com o grau de recuperabilidade dos créditos e a capacidade de pagamento do contribuinte, observados os requisitos, limites e modalidades previstos no Edital.
+
+## 2. Quais os débitos tributários podem ser incluídos na transação?
+
+Podem ser incluídos os créditos tributários em contencioso administrativo fiscal sob gestão da Receita Federal cujo valor seja de até R$ 50.000.000,00 (cinquenta milhões de reais) por contencioso.
+
+Também poderão ser incluídas:
+
+as contribuições sociais previstas nas alíneas "a", "b" e "c" do parágrafo único do art. 11 da Lei nº 8.212/1991;
+as contribuições instituídas a título de substituição; e
+as contribuições devidas a terceiros recolhidas por meio de DARF.
+
+Não poderão ser incluídos débitos relativos aos tributos apurados na forma do Simples Nacional, ressalvadas as multas por atraso no cumprimento de obrigação acessória.
+
+## 3. O que é considerado contencioso administrativo fiscal para fins do Edital?
+
+Considera-se contencioso administrativo fiscal o procedimento instaurado com a apresentação, pelo sujeito passivo, de:
+
+impugnação;
+manifestação de inconformidade; ou
+recurso com efeito suspensivo da exigibilidade do crédito tributário, nos termos do Decreto nº 70.235, de 6 de março de 1972.
+
+## 4. Qual é o objetivo da transação tributária?
+
+A transação tributária tem por finalidade possibilitar a solução consensual de controvérsias tributárias entre o contribuinte e a Receita Federal, mediante concessões recíprocas previstas na legislação.
+
+São objetivos da transação:
+
+facilitar a regularização dos créditos tributários;
+adequar as condições de pagamento à capacidade de pagamento do contribuinte;
+preservar a atividade econômica, a fonte produtora, o emprego e a renda;
+estimular a conformidade tributária; e
+contribuir para a redução da litigiosidade e para a duração razoável dos processos administrativos fiscais.
+
+## 5. O que significam os tipos A, B, C e D atribuídos aos créditos tributários?
+
+Os créditos tributários são classificados, em ordem decrescente de recuperabilidade, da seguinte forma:
+
+Tipo A: créditos com alta perspectiva de recuperação;
+Tipo B: créditos com média perspectiva de recuperação;
+Tipo C: créditos considerados de difícil recuperação;
+Tipo D: créditos considerados irrecuperáveis.
+
+O grau de recuperabilidade é apurado com base na capacidade de pagamento do contribuinte e nos demais critérios previstos no art. 14, parágrafo único, da Lei nº 13.988/2020, regulamentado pela Portaria PGFN nº 6.757, de 2022.
+
+## 6. Em quais hipóteses um crédito poderá ser considerado irrecuperável?
+
+Além da capacidade de pagamento do contribuinte, poderão ser considerados irrecuperáveis os créditos tributários enquadrados nas hipóteses previstas no art. 14, parágrafo único, da Lei nº 13.988/2020, regulamentado pela Portaria PGFN nº 6.757, de 2022.
+
+Na classificação poderão ser consideradas, entre outras, as seguintes situações objetivas:
+
+devedor falido;
+devedor em recuperação judicial;
+devedor em recuperação extrajudicial;
+devedor em liquidação judicial;
+devedor em liquidação extrajudicial;
+devedor sob intervenção extrajudicial;
+pessoa jurídica com situação cadastral baixada;
+pessoa jurídica inapta;
+pessoa jurídica suspensa;
+pessoa jurídica inapta por inexistência de fato;
+pessoa física com indicativo de óbito;
+demais hipóteses previstas na Portaria PGFN nº 6.757/2022.
+
+A classificação observará integralmente os critérios estabelecidos na Lei nº 13.988/2020 e na Portaria PGFN nº 6.757/2022.
+
+## 7. Qual o prazo de adesão?
+
+A adesão poderá ser realizada desde a publicação do Edital até 30 de outubro de 2026, às 23h59min59s, horário oficial de Brasília.
+
+## 8. Como deve ser realizada a adesão?
+
+A adesão deverá ser formalizada mediante abertura de processo digital no Portal de Serviços da Receita Federal.
+
+Após acessar o Portal, selecione:
+
+Meus Processos;
+Solicitar Serviço via Processo Digital;
+serviço correspondente à transação tributária.
+
+O requerimento deverá ser instruído com a documentação exigida pelo Edital.
+
+Para mais informações sobre o procedimento de adesão, consulte o Roteiro Passo a Passo da Transação Tributária,
+
+O contribuinte deverá acompanhar a tramitação do pedido por meio do próprio processo digital.
+  [link: Roteiro Passo a Passo da Transação Tributária -> https://www.gov.br/receitafederal/pt-br/assuntos/transacao-tributaria]
+
+## 9. Quais documentos devem acompanhar o requerimento?
+
+O processo digital deverá ser instruído com:
+
+I - Requerimento de Adesão, em formulário próprio;
+
+II - comprovante da capacidade de pagamento obtido no Portal Regularize;
+
+III - quando houver utilização de créditos de prejuízo fiscal do IRPJ ou de base de cálculo negativa da CSLL, certificação emitida por profissional contábil regularmente inscrito no Conselho Regional de Contabilidade, atestando a existência, regularidade escritural e disponibilidade dos créditos;
+
+IV - quando cabível, reconhecimento expresso de integração em grupo econômico, de direito ou de fato, acompanhado da relação dos reais beneficiários e das pessoas que tenham obtido proveito econômico com a controvérsia.
+
+Caso a documentação esteja incompleta, o contribuinte será intimado para sanar a irregularidade no prazo previsto no Edital.
+
+## 10. É necessário aderir ao Domicílio Tributário Eletrônico (DTE)?
+
+Sim.
+
+A pessoa física deverá aderir expressamente ao Domicílio Tributário Eletrônico (DTE) e manter essa adesão durante todo o período de vigência da transação.
+
+Para a pessoa jurídica, a utilização do DTE é obrigatória, nos termos da legislação aplicável.
+
+## 11. Qual é o valor mínimo das prestações?
+
+Independentemente da modalidade escolhida, o valor mínimo de cada prestação será de:
+
+R$ 200,00 (duzentos reais), para pessoa natural; e
+R$ 300,00 (trezentos reais), para os demais casos.
+
+Caso o número de parcelas resulte em prestação inferior ao valor mínimo, o quantitativo de parcelas será reduzido para adequação aos limites previstos no Edital.
+
+## 12. Quais são as opções de pagamento previstas no Edital?
+
+As opções variam conforme o grau de recuperabilidade do crédito tributário e o perfil do contribuinte.
+
+I – Créditos classificados como irrecuperáveis ou de difícil recuperação (regra geral)
+
+Poderá ser concedida redução de até 100% dos juros, multas e encargos legais, limitada a 65% do valor total de cada crédito tributário, mediante uma das seguintes modalidades:
+
+Opção 1
+
+entrada correspondente a 5% do valor consolidado da dívida, antes da aplicação dos descontos, em até cinco prestações mensais; e
+saldo remanescente em até 115 prestações mensais.
+
+Opção 2
+
+entrada correspondente a 10% do valor consolidado da dívida, antes dos descontos, em até cinco prestações mensais;
+utilização de créditos de prejuízo fiscal e de base de cálculo negativa da CSLL para amortizar até 30% do saldo remanescente; e
+saldo remanescente em até 115 prestações mensais.
+
+II – Pessoa natural, microempresa, empresa de pequeno porte, Santas Casas de Misericórdia, sociedades cooperativas, organizações da sociedade civil e instituições de ensino
+
+Quando os créditos forem classificados como irrecuperáveis ou de difícil recuperação, poderá ser concedida redução de até 70% do valor total de cada crédito tributário, mediante:
+
+entrada correspondente a 5% do valor consolidado da dívida, antes dos descontos, em até dez prestações mensais;
+utilização de créditos de prejuízo fiscal e de base de cálculo negativa da CSLL para amortizar até 30% do saldo remanescente; e
+saldo remanescente em até 135 prestações mensais.
+
+III – Contribuições sociais sujeitas ao limite constitucional
+
+Para as contribuições sociais previstas no art. 195, caput, inciso I, alínea "a", e inciso II, da Constituição Federal, o prazo máximo para pagamento será de 60 meses, mediante:
+
+entrada correspondente a 5% do valor consolidado da dívida, em até dez prestações mensais;
+utilização de créditos de prejuízo fiscal e de base de cálculo negativa da CSLL para amortizar até 30% do saldo remanescente, quando cabível; e
+saldo remanescente em até cinquenta prestações mensais.
+
+IV – Créditos classificados como de alta ou média perspectiva de recuperação
+
+Para créditos classificados como tipos A ou B:
+
+Débitos fazendários
+
+entrada correspondente a 10% do valor consolidado da dívida, em até dez prestações mensais; e
+saldo remanescente em até 74 prestações mensais.
+
+Contribuições previdenciárias sujeitas ao limite constitucional
+
+entrada correspondente a 5% do valor consolidado da dívida, em até dez prestações mensais; e
+saldo remanescente em até cinquenta prestações mensais.
+
+As prestações serão acrescidas da taxa Selic acumulada mensalmente e de 1% relativamente ao mês em que ocorrer o pagamento.
+
+Para auxiliar na escolha da modalidade mais adequada, a Receita Federal disponibiliza um Simulador da Transação Tributária em seu portal, no qual é possível estimar os valores das prestações e dos descontos aplicáveis às opções previstas no Edital.
+
+## 13. Como é calculado o desconto concedido na transação?
+
+O desconto concedido considera:
+
+a capacidade de pagamento do contribuinte;
+o grau de recuperabilidade dos créditos tributários;
+o desconto teórico apurado na forma da regulamentação; e
+o total dos créditos tributários efetivamente listados para a transação.
+
+Os descontos incidem exclusivamente sobre juros, multas e encargos legais, observados os limites previstos na Lei nº 13.988/2020 e no Edital.
+
+A Receita Federal disponibiliza um Simulador da Transação Tributária em seu portal, no qual é possível estimar os valores das prestações e dos descontos aplicáveis.
+
+## 14. Em quais hipóteses podem ser utilizados créditos de prejuízo fiscal e de base de cálculo negativa da CSLL?
+
+Os créditos de prejuízo fiscal do IRPJ e de base de cálculo negativa da CSLL poderão ser utilizados para amortizar até 30% do saldo devedor remanescente, após a aplicação dos descontos e o pagamento da entrada, nas hipóteses previstas no Edital.
+
+Os créditos poderão ser utilizados para amortizar:
+
+principal;
+multas;
+juros; e
+encargos legais.
+
+Para sua utilização, deverão:
+
+ter sido apurados e declarados até 31 de dezembro de 2025;
+pertencer ao sujeito passivo ou às pessoas jurídicas autorizadas pelo Edital;
+estar regularmente escriturados e disponíveis; e
+ser certificados por profissional contábil regularmente inscrito no Conselho Regional de Contabilidade.
+
+A utilização dos créditos ficará sujeita à posterior homologação pela Receita Federal.
+
+## 15. Em quais hipóteses a transação poderá ser rescindida?
+
+A transação poderá ser rescindida nas hipóteses previstas no art. 39 da Portaria RFB nº 555/2025, bem como quando ocorrer:
+
+não pagamento integral da entrada;
+inadimplência de três prestações consecutivas ou seis alternadas;
+falta de pagamento de qualquer prestação nas hipóteses previstas no Edital;
+decretação de falência ou extinção da pessoa jurídica;
+utilização de pessoa interposta para ocultação patrimonial;
+descumprimento das condições previstas no Edital; ou
+ocorrência de qualquer hipótese prevista na Lei nº 13.988/2020.
+
+Antes da rescisão, será assegurado ao contribuinte o direito ao contraditório, na forma prevista na Portaria RFB nº 555/2025.
+
+## 16. Existe data-limite para que o crédito tributário seja considerado em litígio para ser incluído na transação?
+
+Não.
+
+Para ser incluído na transação, o crédito tributário deverá estar em contencioso administrativo fiscal no momento da adesão, ou seja, deverá existir impugnação, manifestação de inconformidade ou recurso regularmente apresentado.
+
+Lançamentos que ainda estejam apenas no prazo para apresentação de impugnação não poderão ser incluídos nesta modalidade de transação
+
+## 17. O que deve ser informado no campo "Valor total da dívida na PGFN e na RFB"?
+
+Deverá ser informado o valor total das dívidas do contribuinte perante a Procuradoria-Geral da Fazenda Nacional e a Receita Federal, conforme demonstrado no comprovante de capacidade de pagamento emitido pelo Portal Regularize.
+
+Não devem ser incluídos nesse campo os débitos em contencioso administrativo que serão objeto da transação, pois esses créditos serão informados em campo próprio do requerimento e utilizados para a determinação do desconto total aplicável.
+
+A Receita Federal disponibiliza um Simulador da Transação Tributária em seu portal, no qual é possível estimar os valores das prestações e dos descontos aplicáveis.
+
+## 18. É possível incluir apenas parte dos débitos constantes de um mesmo processo administrativo?
+
+Não.
+
+O aderente deverá incluir a totalidade dos débitos em contencioso administrativo pertencentes ao mesmo processo administrativo, sendo vedada a inclusão parcial.
+
+## 19. Também podem ser incluídos processos originados de despacho decisório, como DCOMP não homologada?
+
+Sim.
+
+Podem ser incluídos processos decorrentes de despacho decisório, como aqueles relativos à não homologação de Declaração de Compensação (DCOMP).
+
+Isso é possível desde que tenha sido apresentada manifestação de inconformidade.
+
+Além disso, o crédito tributário deve estar regularmente em contencioso administrativo fiscal, nos termos do Decreto nº 70.235, de 6 de março de 1972.
+
+Não basta que esteja em curso o prazo para apresentação da manifestação de inconformidade.
+
+## 20. Caso haja um pedido de adesão com pagamento efetuado, mas o processo seja negado e arquivado, esse pagamento pode ser aproveitado em um novo pedido?
+
+Sim.
+
+Contudo, um novo pagamento referente à entrada deve ser feito.
+
+O pagamento efetuado no pedido anterior será aproveitado no novo requerimento, para abater valor das demais prestações.
+
+Caso não seja possível seu aproveitamento, o valor poderá ser objeto de restituição ou compensação, observados os procedimentos previstos na legislação aplicável
+
+## 21. Na hipótese de novo pedido de adesão, com débitos diferentes, como deve ser feito? Novo processo ou complementação?
+
+Deverá ser formalizado novo processo digital, com novo Requerimento de Adesão, acompanhado da documentação correspondente aos novos débitos e do pagamento da primeira prestação aplicável.
+
+A inclusão de débitos distintos não deve ser realizada por simples complementação do pedido anteriormente apresentado
+
+## 22. Como serão realizados os pagamentos da entrada e das demais prestações?
+
+Os valores relativos à entrada e às demais prestações deverão ser pagos por meio de Documento de Arrecadação de Receitas Federais (Darf) emitido pelo sistema da Receita Federal, até o último dia útil do mês a que se referirem.
+
+O pagamento da primeira prestação até o último dia útil do mês da adesão constitui condição para o deferimento do pedido.
+
+Após o deferimento, o contribuinte será comunicado e poderá informar dados bancários para débito automático das prestações, caso tenha interesse.
+
+## 23. Como obter o valor da capacidade de pagamento?
+
+O valor da capacidade de pagamento e o respectivo comprovante devem ser obtidos no Portal Regularize, administrado pela Procuradoria-Geral da Fazenda Nacional.
+
+O comprovante deverá ser juntado ao processo digital de adesão.
+
+## 24. Como proceder em caso de dúvidas ou discordância quanto aos valores da capacidade de pagamento (CAPAG)?
+
+Dúvidas ou discordâncias quanto à capacidade de pagamento deverão ser tratadas perante a Procuradoria-Geral da Fazenda Nacional, mediante pedido de revisão apresentado pelos procedimentos disponibilizados no Portal Regularize.
+
+A Receita Federal utilizará, para fins de análise da transação, a capacidade de pagamento informada no comprovante juntado ao processo.
+
+## 25. É necessário apresentar pedido de desistência do contencioso administrativo fiscal nos processos que estão na DRJ ou no CARF?
+
+Não.
+
+Não é necessário apresentar pedido separado de desistência nos processos administrativos incluídos na transação.
+
+O requerimento regularmente formalizado suspende a tramitação dos processos administrativos relativos aos créditos incluídos enquanto estiver sob análise.
+
+Com o deferimento, a Receita Federal adotará as providências internas necessárias para registrar a desistência das impugnações, manifestações de inconformidade ou recursos e a renúncia às respectivas alegações de direito.
+
+## 26. Como deve ser formalizada a adesão de empresa incorporada, quando a incorporadora também aderir ao programa?
+
+Na incorporação, a adesão deverá ser formalizada pela incorporadora, sucessora dos direitos e das obrigações da incorporada, por seu responsável perante o CNPJ ou por representante legal com poderes específicos.
+
+O requerimento e os Darfs deverão utilizar o CNPJ da incorporadora.
+
+Caso os processos ou os débitos da incorporada não estejam automaticamente vinculados à sucessora, a situação deverá ser relatada no processo digital, com a juntada dos atos societários e dos demais documentos que comprovem a sucessão.
+
+## 27. O pedido de adesão suspende a cobrança dos débitos para fins de obtenção de certidão negativa de débito (CND)?
+
+Não.
+
+O objeto da transação prevista no Edital RFB nº 9/2026 é o contencioso administrativo fiscal. Os créditos tributários em discussão administrativa já estão submetidos ao regime de suspensão da exigibilidade aplicável ao respectivo processo, enquanto débitos meramente declarados ou em cobrança não são abrangidos por essa modalidade.
+
+O pedido de adesão regularmente formalizado suspende apenas a tramitação dos processos administrativos fiscais relativos aos créditos incluídos na transação.
+
+Nos termos do art. 12 da Lei nº 13.988/2020, a proposta de transação não suspende o crédito tributário e, por isso, não pode ser utilizada para fins de emissão de Certidão Negativa de Débitos (CND).
+
+## 28. Há algum problema caso termine o prazo de adesão e o pedido ainda não tenha sido analisado?
+
+Não.
+
+O prazo previsto no Edital refere-se à formalização da adesão. O requerimento apresentado regularmente até 30 de outubro de 2026 poderá ser analisado após essa data.
+
+Enquanto o pedido estiver sob análise, o contribuinte deverá acompanhar o processo digital, manter atualizados seus canais de comunicação e efetuar regularmente os pagamentos previstos.
+
+Eventual necessidade de complementação documental será comunicada pela Receita Federal.
+
+## 29. O pedido de adesão gera automaticamente a desistência do contencioso administrativo fiscal?
+
+Não.
+
+A apresentação do requerimento de adesão, regularmente formalizado, suspende a tramitação dos processos administrativos relativos aos créditos incluídos enquanto o pedido estiver sob análise.
+
+A desistência das impugnações, manifestações de inconformidade ou recursos, bem como a renúncia às respectivas alegações de direito, produzem efeitos com o deferimento da adesão, condicionado ao cumprimento dos requisitos do Edital e ao pagamento da primeira prestação até o último dia útil do mês da adesão.
+
+## 30. Em caso de demora na análise do pedido de transação, como proceder?
+
+O contribuinte deverá acompanhar a tramitação do pedido no processo digital e manter o pagamento regular das prestações previstas.
+
+Caso seja intimado, deverá apresentar os documentos ou esclarecimentos solicitados no prazo indicado.
+
+Se identificar falha técnica, ausência de movimentação compatível com a situação do processo ou necessidade de informação adicional, poderá utilizar os canais oficiais de atendimento da Receita Federal, indicando o número do processo digital.
+
+## 31. É possível aderir à transação para débitos decorrentes de lançamento de ofício que ainda estão no prazo para impugnação?
+
+Não no âmbito do Edital RFB nº 9/2026.
+
+Para essa modalidade de transação, o crédito deverá estar em contencioso administrativo fiscal, instaurado mediante apresentação de impugnação, manifestação de inconformidade ou recurso com efeito suspensivo.
+
+A possibilidade de inclusão de lançamento de ofício ainda no prazo para impugnação, sem apresentação da defesa, constitui regra específica da transação de pequeno valor disciplinada pelo Edital RFB nº 10/2026.
+
+## 32. Como devem ser tratadas as multas isoladas (quando não há tributo) para fins de inclusão na transação?
+
+As multas isoladas deverão ser informadas no campo "Principal" do demonstrativo de débitos.
+
+Essa orientação aplica-se exclusivamente ao preenchimento do demonstrativo utilizado para adesão à transação.
+
+## 33. Há modalidade de transação para créditos de pequeno valor?
+
+Sim.
+
+Os créditos tributários de pequeno valor são objeto do Edital RFB nº 10/2026, destinado à pessoa natural, ao microempreendedor individual, ao empresário individual, à microempresa e à empresa de pequeno porte.
+
+As modalidades permitem pagamento em até 12, 24, 36 ou 55 prestações, com reduções de 50%, 40%, 35% ou 30%, respectivamente, observados os requisitos previstos naquele Edital.
+
+A adesão ao Edital RFB nº 10/2026 poderá ser realizada até 30 de outubro de 2026.
+
+## 34. O que é considerado crédito tributário de pequeno valor?
+
+Considera-se de pequeno valor o crédito tributário cujo valor não ultrapasse 60 (sessenta) salários-mínimos por processo administrativo.
+
+Os créditos de pequeno valor são disciplinados especificamente pelo Edital RFB nº 10/2026, que estabelece seus requisitos, modalidades de pagamento e demais condições para adesão. O limite deve ser aferido por processo administrativo, nos termos daquele Edital.

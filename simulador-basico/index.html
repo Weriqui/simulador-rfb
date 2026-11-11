@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Negociações (não oficial)</title>
+    <style>
+        :root {
+            --azul: #1351b4;
+            --azul-escuro: #0c326f;
+            --azul-claro: #dbe8fb;
+            --verde: #168821;
+            --vermelho: #b00020;
+            --laranja: #b35c00;
+            --texto: #1b1b1b;
+            --texto-suave: #555;
+            --borda: #d6d6d6;
+            --fundo: #f5f6f8;
+            --cartao: #ffffff;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 15px;
+            color: var(--texto);
+            background: var(--fundo);
+        }
+        header {
+            background: var(--azul-escuro);
+            color: #fff;
+            padding: 16px 24px;
+        }
+        header h1 { margin: 0; font-size: 1.35rem; font-weight: 600; }
+        header p { margin: 4px 0 0; opacity: .85; font-size: .9rem; }
+        main { max-width: 1500px; margin: 0 auto; padding: 20px 16px 60px; }
+        .aviso {
+            background: #fff5c2; border: 1px solid #f0d36b; border-radius: 10px;
+            padding: 10px 14px; font-size: .85rem; margin-bottom: 18px;
+        }
+        .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+        .cartao {
+            background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px;
+            padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        }
+        .cartao h2 { margin: 0 0 12px; font-size: 1.05rem; color: var(--azul-escuro); }
+        .cartao h3 { margin: 14px 0 8px; font-size: .95rem; }
+        .opcoes-radio label, .opcoes-check label { display: flex; gap: 8px; align-items: flex-start; padding: 5px 0; cursor: pointer; }
+        .opcoes-radio input, .opcoes-check input { margin-top: 3px; accent-color: var(--azul); }
+        .linha-campo { display: grid; grid-template-columns: 1fr 180px; gap: 10px; align-items: center; margin: 8px 0; }
+        .linha-campo span { font-size: .9rem; }
+        input[type="text"], input[type="number"], select {
+            font: inherit; padding: 6px 8px; border: 1px solid #888; border-radius: 6px; background: #fff; color: var(--texto);
+        }
+        input.moeda { text-align: right; width: 100%; }
+        input[readonly] { background: #eee; }
+        input:focus, select:focus { outline: 2px solid var(--azul); outline-offset: 1px; }
+        .modo { display: flex; gap: 18px; margin-bottom: 10px; flex-wrap: wrap; }
+        table { border-collapse: collapse; width: 100%; }
+        .tabela-debitos th, .tabela-debitos td { padding: 4px; text-align: center; font-size: .85rem; }
+        .tabela-debitos th { color: var(--texto-suave); font-weight: 600; }
+        .tabela-debitos input { width: 100%; text-align: right; }
+        button {
+            font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--azul);
+            background: #fff; color: var(--azul); padding: 6px 16px; font-weight: 600;
+        }
+        button.primario { background: var(--azul); color: #fff; }
+        button.pequeno { padding: 2px 10px; font-size: .8rem; }
+        button:hover { filter: brightness(.95); }
+        .barra-botoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+        .resumo-rating { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .resumo-rating div { background: var(--fundo); border-radius: 8px; padding: 8px 10px; font-size: .85rem; }
+        .resumo-rating strong { display: block; font-size: 1.1rem; color: var(--azul-escuro); }
+        .dica { font-size: .8rem; color: var(--texto-suave); }
+
+        #secao-resultado { margin-top: 22px; }
+        .container-tabela { overflow-x: auto; border-radius: 12px; border: 1px solid var(--borda); background: #fff; }
+        .quadro th, .quadro td { padding: 10px; border-bottom: 1px solid #eee; vertical-align: middle; font-size: .85rem; }
+        .quadro thead th { background: #f0f0f0; font-weight: 600; text-align: center; white-space: nowrap; }
+        .quadro td:first-child, .quadro th:first-child {
+            position: sticky; left: 0; background: var(--azul); color: #fff; min-width: 230px; font-weight: 600; z-index: 1;
+        }
+        .quadro td.centro { text-align: center; white-space: nowrap; }
+        .quadro .vantagens { color: var(--verde); font-weight: 600; min-width: 190px; }
+        .quadro .saldo { font-size: 1.05rem; font-weight: 700; }
+        .quadro .inelegivel { color: var(--texto-suave); }
+        .quadro .inelegivel::before { content: "✖ "; color: var(--vermelho); }
+        .quadro select { min-width: 230px; max-width: 320px; margin: 2px 0; }
+        .quadro input.parc { width: 64px; text-align: center; border-color: var(--azul); }
+        .quadro input.pf { width: 140px; text-align: right; border-color: var(--azul); font-style: italic; }
+        .quadro input.pf.erro { border-color: var(--vermelho); }
+        .sub { font-size: .75rem; color: var(--texto-suave); margin-top: 2px; }
+        .erro-texto { font-size: .75rem; color: var(--vermelho); margin-top: 2px; white-space: normal; max-width: 220px; }
+        .prazo { display: block; font-weight: 400; font-size: .75rem; opacity: .85; margin-top: 3px; }
+        .quadro tr.linha-detalhe > td {
+            position: static; background: #fafbfd; color: var(--texto); font-weight: 400; min-width: 0; padding: 12px 0;
+        }
+        .detalhe-fixo { position: sticky; left: 12px; width: calc(min(100vw, 1500px) - 70px); }
+        .detalhe-fixo > h4 { margin: 0 0 8px; font-size: .9rem; color: var(--azul-escuro); }
+        .memoria { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+        .memoria section { background: #fff; border: 1px solid #e4e4e4; border-radius: 8px; padding: 10px 12px; }
+        .memoria h4 { margin: 0 0 6px; font-size: .85rem; color: var(--azul-escuro); }
+        .memoria dl { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; margin: 0; font-size: .8rem; }
+        .memoria dt { color: var(--texto-suave); }
+        .memoria dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+        .memoria dd.destaque { font-weight: 700; color: var(--verde); }
+        .avisos { margin-top: 8px; font-size: .8rem; color: var(--laranja); }
+        .vazio { padding: 18px; background: var(--azul-claro); border-radius: 10px; color: var(--azul-escuro); }
+        .toast { position: fixed; bottom: 18px; right: 18px; background: var(--azul-escuro); color: #fff; padding: 10px 16px; border-radius: 8px; opacity: 0; transition: opacity .3s; pointer-events: none; }
+        .toast.visivel { opacity: 1; }
+        .oculto { display: none !important; }
+        @media (max-width: 640px) {
+            .linha-campo { grid-template-columns: 1fr; }
+            main { padding: 14px 10px 50px; }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Simulador de Negociações — versão básica (não oficial)</h1>
+    <p>Réplica independente das fórmulas da calculadora da RFB/PGFN (Editais RFB nº 9/2026 e nº 10/2026, PGFN nº 06/2026). Sem vínculo com a Receita Federal ou a PGFN.</p>
+</header>
+
+<main>
+    <div class="aviso">
+        <strong>Ferramenta não oficial</strong>, feita de forma independente, sem vínculo com a Receita Federal ou a PGFN. Usa as mesmas fórmulas da
+        <a href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/transacao-tributaria/calculadora/simulador/" target="_blank" rel="noopener">calculadora oficial</a> (versão 1.0.0, conferida em 10/11/2026). Simulação informativa: não gera direito à transação.
+        Nenhum dado sai do seu navegador.
+        Dica: use <strong>“Copiar link”</strong> para salvar ou repetir uma simulação pela URL.<br>
+        Vai aderir pela RFB? Os <strong>formulários de adesão</strong> (discriminativos) calculam diferente desta calculadora:
+        <a href="./formularios.html">abrir o simulador dos formulários de adesão</a>.
+    </div>
+
+    <div class="grade">
+        <!-- 1. IDENTIFICAÇÃO -->
+        <div class="cartao">
+            <h2>1. Identificação do contribuinte</h2>
+            <div class="opcoes-radio" id="tipos">
+                <label><input type="radio" name="tipo" value="PN"> Pessoa Natural</label>
+                <label><input type="radio" name="tipo" value="PN_OBITO"> Pessoa Natural com indicativo de óbito</label>
+                <label><input type="radio" name="tipo" value="MEI"> Microempreendedor Individual (MEI)</label>
+                <label><input type="radio" name="tipo" value="ME_EPP"> Microempresa (ME) ou Empresa de Pequeno Porte (EPP)</label>
+                <label><input type="radio" name="tipo" value="DEMAIS_PJ"> Demais Pessoas Jurídicas</label>
+            </div>
+            <div id="bloco-situacao" class="oculto">
+                <h3>Situação cadastral</h3>
+                <div class="opcoes-check">
+                    <label><input type="checkbox" id="sit-falido"> Falido, em recuperação judicial/extrajudicial, em liquidação judicial, em intervenção ou liquidação extrajudicial</label>
+                    <label><input type="checkbox" id="sit-baixado"> Baixado ou inapto (inaptidão, inexistência de fato, omissão contumaz, localização desconhecida etc.) ou suspenso por inexistência de fato</label>
+                </div>
+                <p class="dica">Qualquer uma dessas situações (ou PN com óbito) força o <strong>Rating D</strong>.</p>
+            </div>
+        </div>
+
+        <!-- 2. COMPOSIÇÃO DA DÍVIDA -->
+        <div class="cartao">
+            <h2>2. Composição da dívida</h2>
+            <div class="modo">
+                <label><input type="radio" name="modo" value="AGREGADO" checked> Valor total dos débitos</label>
+                <label><input type="radio" name="modo" value="POR_DEBITO"> Por débito</label>
+            </div>
+            <div id="bloco-agregado">
+                <div class="linha-campo"><span>Principal — soma (R$)</span><input class="moeda" data-agregado="principal" type="text" inputmode="decimal" placeholder="0,00"></div>
+                <div class="linha-campo"><span>Multa — soma (R$)</span><input class="moeda" data-agregado="multa" type="text" inputmode="decimal" placeholder="0,00"></div>
+                <div class="linha-campo"><span>Juros — soma (R$)</span><input class="moeda" data-agregado="juros" type="text" inputmode="decimal" placeholder="0,00"></div>
+            </div>
+            <div id="bloco-por-debito" class="oculto">
+                <table class="tabela-debitos">
+                    <thead><tr><th>#</th><th>Principal</th><th>Multa</th><th>Juros</th><th>Total</th><th></th></tr></thead>
+                    <tbody id="corpo-debitos"></tbody>
+                </table>
+                <div class="barra-botoes"><button type="button" id="btn-incluir-debito" class="pequeno">+ Incluir débito</button></div>
+            </div>
+            <div class="linha-campo" style="margin-top:12px;"><span><strong>Total dos débitos</strong></span><input id="total-debitos" class="moeda" type="text" readonly></div>
+        </div>
+
+        <!-- 3. CLASSIFICAÇÃO -->
+        <div class="cartao">
+            <h2>3. Classificação do débito (CAPAG)</h2>
+            <div class="linha-campo"><span>Capacidade de pagamento em 60 meses (R$) *</span><input id="capag" class="moeda" type="text" inputmode="decimal" placeholder="0,00"></div>
+            <div class="linha-campo"><span>Valor total da dívida na PGFN e RFB (R$) *</span><input id="divida-total" class="moeda" type="text" inputmode="decimal" placeholder="0,00"></div>
+            <div class="linha-campo"><span>Total de débitos que deseja transacionar (R$)</span><input id="total-transacionar" class="moeda" type="text" inputmode="decimal" readonly></div>
+            <label class="dica" style="display:flex; gap:6px; align-items:flex-start; margin-top:4px;">
+                <input type="checkbox" id="fixar-transacionar">
+                <span>Fixar este valor. Use só para reproduzir o site quando os débitos foram alterados depois de "Confirmar total de débitos" sem reconfirmar: o site continua usando o total antigo no rating da RFB.</span>
+            </label>
+            <p class="dica">* No site oficial esses dados vêm do Regularize (PGFN): Negociar Dívida › Acesso ao Sistema de Negociações › Capacidade de Pagamento.</p>
+            <div class="resumo-rating" id="resumo-rating"></div>
+        </div>
+    </div>
+
+    <div class="barra-botoes">
+        <button type="button" class="primario" id="btn-copiar-link">Copiar link desta simulação</button>
+        <button type="button" id="btn-copiar-json">Copiar resultado (JSON)</button>
+        <button type="button" id="btn-reiniciar-escolhas">Reiniciar escolhas do quadro</button>
+        <button type="button" id="btn-limpar">Limpar tudo</button>
+    </div>
+
+    <!-- RESULTADO -->
+    <section id="secao-resultado">
+        <h2 style="font-weight:400; font-size:1.6rem; margin: 10px 0 14px;">Quadro-Resumo Comparativo</h2>
+        <div id="resultado-vazio" class="vazio">Preencha o tipo de contribuinte, os débitos, a CAPAG e o valor total da dívida para ver a comparação.</div>
+        <div id="container-quadro" class="container-tabela oculto">
+            <table class="quadro">
+                <thead>
+                    <tr>
+                        <th>Órgão/Modalidade</th>
+                        <th>Vantagens</th>
+                        <th>Dívida elegível<br>(sem redução)</th>
+                        <th>Modalidades</th>
+                        <th>Redução</th>
+                        <th>Saldo devedor<br>(após redução)</th>
+                        <th>Entrada</th>
+                        <th>Nº de parcelas</th>
+                        <th>Uso PF/BCN</th>
+                        <th>Detalhes</th>
+                    </tr>
+                </thead>
+                <tbody id="corpo-quadro"></tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="./motor-calculo.js"></script>
+<script src="./app.js"></script>
+</body>
+</html>

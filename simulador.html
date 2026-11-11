@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FAVICON -->
+    <link rel="shortcut icon" href="./assets/img/favicon.ico">
+
+    <!-- Fontes Design System gov.br -->
+    <link rel="stylesheet" href="https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900&amp;display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- CSS GOVBR -->
+    <link rel="stylesheet" href="./govbr/core.min.css" />
+
+    <!-- JS GOVBR -->
+    <script src="./govbr/core.min.js" defer></script>
+
+    <!-- Bibliotecas de PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+    <script src="./assets/pdf/jspdf.umd.min.js"></script>
+
+
+    <!-- Scripts Internos do Core -->
+    <script src="./assets/js/core/utils.js" defer></script>
+    <script src="./assets/js/core/estado_global.js" defer></script>
+    <script src="./assets/js/core/composicao-divida.js" defer></script>
+    <script src="./assets/js/core/quadro-resumo.js" defer></script>
+    <script src="./assets/js/core/vantagens-comparativas.js" defer></script>
+    
+    <!-- Modalidades -->
+    <script src="./assets/js/modalidades/rfb-pequeno-valor.js" defer></script>
+    <script src="./assets/js/modalidades/50milh.js" defer></script>
+    <script src="./assets/js/modalidades/pgfn-pequeno-valor.js" defer></script>
+    <script src="./assets/js/modalidades/pgfn-capacidade-pagamento.js" defer></script>
+
+    <style>
+        @media print {
+            body * { display: none !important; }
+            body::before {
+                content: "Impressão desabilitada. Utilize o botão 'Gerar Documento' para gerar o PDF oficial.";
+                display: block;
+                position: fixed;
+                inset: 0;
+                text-align: center;
+                font-size: 24px;
+                font-weight: bold;
+                color: #b00020;
+                padding-top: 40vh;
+                background: white;
+            }
+        }
+
+        /* ===== Ajuste de largura e rolagem — Quadro-Resumo Comparativo ===== */
+
+        /* Garante que o container ative a rolagem horizontal quando a tabela for mais larga que a tela */
+        #id-quadro-resumo-tabela-container {
+            overflow-x: auto;
+        }
+
+        /* Impede quebra de linha por padrão em todas as células (o que é a causa do "espremido") */
+        #id-tabela-quadro-resumo th,
+        #id-tabela-quadro-resumo td {
+            white-space: nowrap;
+            padding: 12px;
+        }
+
+        /* Coluna 1 — Órgão/Modalidade (fixa no scroll horizontal) */
+        #id-tabela-quadro-resumo th:nth-child(1),
+        #id-tabela-quadro-resumo td:nth-child(1) {
+            position: sticky;
+            left: 0;
+            background-color: #1351b4;
+            color: #ffffff;
+            z-index: 1;
+            box-shadow: 2px 0 4px rgba(0,0,0,0.3);
+            min-width: 260px;
+            white-space: normal;
+        }
+
+        /* Coluna 2 — Vantagens */
+        #id-tabela-quadro-resumo th:nth-child(2),
+        #id-tabela-quadro-resumo td:nth-child(2) {
+            min-width: 220px;
+            white-space: normal;
+        }
+
+        /* Coluna 3 — Dívida sem Redução */
+        #id-tabela-quadro-resumo th:nth-child(3),
+        #id-tabela-quadro-resumo td:nth-child(3) {
+            min-width: 150px;
+        }
+
+        /* Coluna 4 — Modalidades (select) */
+        #id-tabela-quadro-resumo th:nth-child(4),
+        #id-tabela-quadro-resumo td:nth-child(4) {
+            min-width: 320px;
+        }
+
+        /* Coluna 5 — Redução (%) */
+        #id-tabela-quadro-resumo th:nth-child(5),
+        #id-tabela-quadro-resumo td:nth-child(5) {
+            min-width: 100px;
+        }
+
+        /* Coluna 6 — Saldo Devedor (após redução) */
+        #id-tabela-quadro-resumo th:nth-child(6),
+        #id-tabela-quadro-resumo td:nth-child(6) {
+            min-width: 180px;
+        }
+
+        /* Coluna 7 — Entrada */
+        #id-tabela-quadro-resumo th:nth-child(7),
+        #id-tabela-quadro-resumo td:nth-child(7) {
+            min-width: 180px;
+        }
+
+        /* Coluna 8 — Nº de Parcelas */
+        #id-tabela-quadro-resumo th:nth-child(8),
+        #id-tabela-quadro-resumo td:nth-child(8) {
+            min-width: 180px;
+        }
+
+        /* Coluna 9 — Uso PF/BCN */
+        #id-tabela-quadro-resumo th:nth-child(9),
+        #id-tabela-quadro-resumo td:nth-child(9) {
+            min-width: 150px;
+        }
+
+        /* Coluna 10 — Detalhes */
+        #id-tabela-quadro-resumo th:nth-child(10),
+        #id-tabela-quadro-resumo td:nth-child(10) {
+            min-width: 100px;
+        }
+
+
+        /* ===== ARREDONDAMENTO DE TODAS AS TABELAS ===== */
+        
+        /* 1. Arredonda os containers roláveis (Quadros-resumo, composição de dívidas e detalhes) */
+        .table-responsive {
+            border-radius: 12px;         /* Ajuste este valor para deixar mais ou menos arredondado */
+            border: 1px solid #dcdcdc;   /* Adiciona um contorno visível na quina */
+            background-color: #ffffff;   /* Garante que quinas vazias fiquem brancas */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* Sombra elegante para destacar o card da tabela */
+        }
+
+        /* 2. Arredonda a tabela de Capacidade de Pagamento (que possui uma estrutura HTML diferente) */
+        #id-classificacao-debitos .br-table {
+            border-radius: 12px;
+            border: 1px solid #dcdcdc;
+            background-color: #ffffff;
+            overflow: hidden; /* Corta o fundo das células retas para elas não vazarem nas quinas do container */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        /* 3. Remove a borda reta original nativa do Design System para não ficar com "borda dupla" */
+        .table-responsive table,
+        #id-classificacao-debitos table {
+            border: none !important;
+            margin-bottom: 0 !important;
+        }
+
+        /* 4. Remove a borda inferior das últimas células para encaixar perfeitamente na quina do container */
+        .table-responsive tfoot td,
+        .table-responsive tfoot th,
+        .table-responsive tbody tr:last-child td {
+            border-bottom: none !important;
+        }
+
+        /* ── Tooltip de ajuda (ícone "i") — usado no Quadro-Resumo para o Prazo de Adesão ── */
+        .tooltip-ajuda {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+        .icone-ajuda {
+            color: #ffffff;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+        .tooltip-texto {
+            visibility: hidden;
+            opacity: 0;
+            width: 220px;
+            background-color: #1351b4;
+            color: #ffffff;
+            text-align: left;
+            border-radius: 6px;
+            padding: 10px 12px;
+            position: absolute;
+            z-index: 99999;
+            top: 150%;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.25s ease;
+            font-size: 0.75rem;
+            font-weight: normal;
+            line-height: 1.4;
+            white-space: normal;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+        .tooltip-texto::after {
+            content: "";
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: transparent transparent #1351b4 transparent;
+        }
+        .tooltip-ajuda:hover .tooltip-texto,
+        .tooltip-ajuda:focus-within .tooltip-texto {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* Variante escura do ícone (fundo claro) e tooltip largo para a Dívida Elegível da PGFN */
+        .icone-ajuda-escuro {
+            color: #1351b4;
+            opacity: 1;
+        }
+        .tooltip-texto.tooltip-texto-largo {
+            width: 340px;
+            max-width: 80vw;
+        }
+        /* A 1ª coluna é sticky (z-index 1): sem isto, a célula da linha seguinte cobre o tooltip da linha atual */
+        #id-tabela-quadro-resumo td:nth-child(1):hover,
+        #id-tabela-quadro-resumo td:nth-child(1):focus-within {
+            z-index: 100;
+        }
+        /* Tooltip posicionado via JS (position: fixed) para não ser cortado pelo overflow da tabela */
+        .tooltip-texto.tooltip-fixo {
+            position: fixed;
+            transform: none;
+            top: auto;
+            left: auto;
+        }
+        .tooltip-texto.tooltip-fixo::after {
+            left: var(--seta-x, 50%);
+        }
+        .tooltip-texto.tooltip-acima::after {
+            bottom: auto;
+            top: 100%;
+            border-color: #1351b4 transparent transparent transparent;
+        }
+    </style>
+
+    <title>Simulador de Negociações - RFB</title>
+</head>
+
+<!--TEMPLATE LINHA ORDINARIA DA TABELA DETALHAMENTO DOS CREDITOS TRIBUTARIOS-->
+<template id="id-template-debito">
+    <tr>
+
+        <!--VALOR PRINCIPAL-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center principal" type="text" oninput="handleValidarValorNaoNegativo(this)" onchange="calcularValorTotalProcesso(this)" name="valor_principal">
+            </div>
+        </td>
+
+        <!--MULTA-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center multa" type="text" oninput="handleValidarValorNaoNegativo(this)" onchange="calcularValorTotalProcesso(this)" name="multa">
+            </div>
+        </td>
+
+        <!--JUROS-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center juros" type="text" oninput="handleValidarValorNaoNegativo(this)" onchange="calcularValorTotalProcesso(this)" name="juros">
+            </div>
+        </td>
+
+        <!--VALOR TOTAL DO PROCESSO-->
+        <td class="text-center p-2">
+            <div class="br-input obrigatorio">
+                <input class="text-center total" type="text" readonly name="valor_total_processo">
+            </div>
+        </td>
+
+        <!--AÇÕES-->
+        <td class="text-center p-2 acoes">
+            <button class="br-button" onclick="excluirLinha(this)">
+                <i class="fa fa-trash-alt"></i>
+            </button>
+        </td>
+    </tr>
+</template>
+
+<!--TEMPLATE LINHA TOTAL GERAL DA TABELA DETALHAMENTO DOS CREDITOS TRIBUTARIOS-->
+<template id="id-template-total-geral">
+    <tr>
+        <td class="text-center text-up-01 p-2"></td>
+        <td class="text-center text-up-01 p-2"></td>
+        <td class="text-center text-up-01 p-2"></td>
+        <td class="text-center text-up-01 p-2 text-right text-up-02">Total R$</td>
+        <td class="text-center text-up-01 p-2">
+            <div class="br-input">
+                <input class="text-center" type="text" id="totalGeral" readonly name="total_geral">
+            </div>
+        </td>
+        <td class="text-center text-up-01 p-2"></td>
+    </tr>
+</template>
+
+<body class="d-flex flex-column" style="background-color: #f8f8f8; min-height: 100vh;">
+
+   <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-grow-1">
+
+        <!-- HEADER GOV.BR -->
+        <header class="br-header">
+            <div class="container-lg">
+                <div class="header-top">
+                    <div class="header-logo">
+                        <svg version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 374.7 134.9" style="enable-background:new 0 0 374.7 134.9;" xml:space="preserve">
+                            <style type="text/css">
+                                .st0 { fill: #2864AE; }
+                                .st1 { fill: #46AD44; }
+                                .st2 { fill: #FABD10; }
+                            </style>
+                            <path class="st0" d="M40.1,84.7c8.9,0,16-7.5,16-18.7c0-8.1-4.8-17.2-16-17.2c-9.3,0-14.2,8.2-14.2,18.1C25.9,78.3,32.6,84.7,40.1,84.7zM80.4,95.5c0,29.8-14.5,39.4-43.8,39.4c-12,0-21.9-2.5-27.7-4.6l1.3-19.8c7.7,3.8,14.1,6,24.5,6c14.5,0,22.3-6.8,22.3-21.1v-3.9h-0.3c-6,8.5-14.4,12.4-24.4,12.4C12.4,104,0,88.9,0,67.4c0-21.6,10.2-37.8,32.8-37.8c10.7,0,19.4,5.9,24.7,14.8h0.3V31.3h22.7L80.4,95.5L80.4,95.5z" />
+                            <polygon class="st1" points="181.6,103.9 209.5,103.9 235.8,31.7 211.4,31.7 196.6,83.1 196.3,83.1 181.6,31.7 155.3,31.7 " />
+                            <path class="st2" d="M139,67.8c0-10.8-4.7-20.4-16.2-20.4c-11.5,0-16.2,9.6-16.2,20.4c0,10.7,4.7,20.2,16.2,20.2C134.3,88,139,78.5,139,67.8z M80.8,67.8c0-24,18.1-37.8,42-37.8s42,13.9,42,37.8c0,23.8-18.1,37.7-42,37.7C99,105.5,80.8,91.6,80.8,67.8z" />
+                            <path class="st0" d="M238.6,93.7c0,6.5-5.3,11.8-11.8,11.8c-6.5,0-11.8-5.3-11.8-11.8c0-6.5,5.3-11.8,11.8-11.8 C233.3,81.8,238.6,87.1,238.6,93.7z" />
+                            <path class="st0" d="M281,49.2c-9.1,0-15.2,8-15.2,18.8c0,10.5,6.9,18.4,15.2,18.4c9.4,0,15.1-7.9,15.1-19.4C296.1,57.5,290.7,49.2,281,49.2z M240.9,0h25.1v41h0.3c6.4-8,14.8-10.9,24.8-10.9c20,0,30.9,19,30.9,36.4c0,21.3-11.5,39.1-33,39.1c-11.5,0-21.6-6.5-24.8-14.6h-0.3v12.9h-23L240.9,0L240.9,0z" />
+                            <path class="st2" d="M373.4,51.7c-2.8-0.8-5.5-0.8-8.5-0.8c-11.6,0-18.1,8.4-18.1,22.6v30.5h-24.9V31.7h22.7V45h0.3c4.3-9.1,10.5-15,21.3-15c2.9,0,6,0.4,8.5,0.8L373.4,51.7z" />
+                        </svg>
+                    </div>
+                </div>
+                <div class="header-bottom">
+                    <div class="header-menu">
+                        <div class="header-info">
+                            <div class="header-title">Simulador de Negociações</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- AVISO INICIAL -->
+        <div class="container-lg mt-5">
+            <div class="br-message warning" role="alert">
+                <div class="content">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="fas fa-exclamation-triangle me-2" aria-hidden="true"></i>
+                        <span class="message-title">Aviso importante</span>
+                    </div>
+                    <ul class="mb-0">
+                        <li>
+                            Os cálculos e as opções de negociação demonstradas neste
+                            simulador têm caráter meramente informativo e auxiliar.
+                        </li>
+                        <li>
+                            A simulação não gera direitos ao contribuinte, não reflete
+                            necessariamente as atualizações exatas dos sistemas oficiais
+                            e não garante o deferimento do parcelamento ou transação.
+                        </li>
+                        <li>
+                            Este simulador não contempla todas as modalidades de
+                            Transação oferecidas pela Receita Federal do Brasil e pela
+                            Procuradoria-Geral da Fazenda Nacional.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- IDENTIFICACAO DO CONTRIBUINTE -->
+        <section id="id-identificacao-do-contribuinte" class="secao container my-5 toPdf pagina1" name="identificacao-do-contribuinte">
+            <div class="row">
+
+                <div class="col-12 text-center mb-5">
+                    <h2 class="text-up-02 text-weight-semi-bold" style="margin: 0;">SIMULADOR DE NEGOCIAÇÕES</h2>
+                </div>
+
+                <!-- TIPO DE CONTRIBUINTE -->
+                <div class="col-12">
+                    <h1 class="mb-5">Identificação do Contribuinte</h1>
+                    <div class="p-4" style="border-radius: 12px; border: 1px solid #dcdcdc; background-color: #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+
+                        <!--PESSOA NATURAL-->
+                        <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                            <input id="op-pn" type="radio" name="tipo_contribuinte" value="PN" onclick="atualizarPerfilContribuinte()"/>
+                            <label for="op-pn" class="text-up-02">Pessoa Natural</label>
+                        </div>
+
+                        <!-- PESSOA NATURAL COM INDICATIVO DE OBITO -->
+                        <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                            <input id="op-pn-obito" type="radio" name="tipo_contribuinte" value="PN_OBITO" onclick="atualizarPerfilContribuinte()"/>
+                            <label for="op-pn-obito" class="text-up-02">Pessoa Natural com indicativo de óbito</label>
+                        </div>
+
+                        <!-- ================= NOVA OPÇÃO: MEI ISOLADO ================= -->
+                        <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                            <input id="op-mei" type="radio" name="tipo_contribuinte" value="MEI" onclick="atualizarPerfilContribuinte()"/>
+                            <label for="op-mei" class="text-up-02">Microempreendedor Individual (MEI)</label>
+                        </div>
+
+                        <!-- ================= ME / EPP MANTIDOS ================= -->
+                        <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                            <input id="op-me-epp" type="radio" name="tipo_contribuinte" value="ME_EPP" onclick="atualizarPerfilContribuinte()"/>
+                            <label for="op-me-epp" class="text-up-02">Microempresa (ME) ou Empresa de Pequeno Porte (EPP)</label>
+                        </div>
+
+                        <!-- DEMAIS PJ -->
+                        <div class="br-radio mb-5 obrigatorio" name="opcoes-identificacao-contribuinte">
+                            <input id="op-demais-pj" type="radio" name="tipo_contribuinte" value="DEMAIS_PJ" onclick="atualizarPerfilContribuinte()"/>
+                            <label for="op-demais-pj" class="text-up-02">Demais Pessoas Jurídicas</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ÓRGÃO PÚBLICO (Inativo/Oculto temporariamente via classe d-none) -->
+                <div class="col-12 mt-4 d-none">
+                    <h3 class="text-weight-semi-bold mb-3">É órgão público?</h3>
+                    <div class="d-flex">
+                        <div class="br-radio mr-5 obrigatorio">
+                            <input id="orgao-pub-sim" type="radio" name="orgao_publico" value="S" onclick="atualizarPerfilContribuinte()">
+                            <label for="orgao-pub-sim" class="text-up-02">Sim</label>
+                        </div>
+                        <div class="br-radio obrigatorio">
+                            <input id="orgao-pub-nao" type="radio" name="orgao_publico" value="N" onclick="atualizarPerfilContribuinte()" checked>
+                            <label for="orgao-pub-nao" class="text-up-02">Não</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- OPCOES DE SITUACAO CADASTRAL (EXIBIDA PARA ME, EPP, DEMAIS PJ) -->
+        <section id="id-opcoes-contribuintes" class="secao container mb-5 toPdf pagina1 d-none" name="opcoes-contribuintes">
+            <div class="row">
+                <div id="id-demais-opcoes-contribuintes" class="col-12 mt-4 pt-4 border-top" >
+                    <h3 class="text-weight-semi-bold mb-3">Situação Cadastral</h3>
+                    <p class="text-down-01 mb-4">Selecione abaixo caso a pessoa jurídica se enquadre em alguma das situações.</p>
+                    
+                    <div class="br-checkbox mb-3xh">
+                        <input id="sit-falido" name="sit_falido" type="checkbox" aria-label="Falido ou Recuperação" class="contribuinte" onclick="atualizarPerfilContribuinte()"/>
+                        <label for="sit-falido" class="text-up-01">Falidos, em recuperação judicial, em recuperação extrajudicial, em liquidação judicial, em intervenção ou liquidação extrajudicial</label>
+                    </div>
+                    
+                    <div class="br-checkbox mb-3xh">
+                        <input id="sit-baixado" name="sit_baixado" type="checkbox" aria-label="Baixado ou Inapto" class="contribuinte" onclick="atualizarPerfilContribuinte()">
+                        <label for="sit-baixado" class="text-up-01">Baixado por inaptidão, baixado por inexistência de fato, baixado por omissão contumaz, baixado por encerramento da falência, baixado pelo encerramento da liquidação judicial, baixado pelo encerramento da liquidação, inapto por localização desconhecida, inapto por inexistência de fato, inapto omisso e não localização, inapto por omissão contumaz, inapto por omissão de declarações, suspenso por inexistência de fato</label>
+                    </div>
+
+                    <div class="br-checkbox mb-3xh">
+                        <input id="sit-nenhuma" name="sit_nenhuma" type="checkbox" aria-label="Nenhuma das anteriores" class="contribuinte" onchange="if(this.checked) { document.getElementById('sit-falido').checked = false; document.getElementById('sit-baixado').checked = false; atualizarPerfilContribuinte(); }">
+                        <label for="sit-nenhuma" class="text-up-01 text-weight-semi-bold">Nenhuma das anteriores</label>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPOSICAO DA DIVIDA -->
+        <section id="id-composicao-divida" class="secao container my-5 toPdf pagina1 d-none" name="composicao-divida">
+            <div class="row">
+                <div class="col-12 mt-4 pt-4 border-top">
+                    <h1 class="mb-5">Composição da Dívida</h1>
+
+                    <!-- SELETOR DE MODO DE SIMULAÇÃO -->
+                    <div class="row mb-5">
+                        <div class="col-12">
+                            <h3 class="text-weight-semi-bold mb-3">Como você deseja simular?</h3>
+                    
+                            <div class="br-radio d-inline-block mr-5">
+                                <input id="modo-por-debito" type="radio" name="modo_simulacao" value="POR_DEBITO" onclick="selecionarModoSimulacao('POR_DEBITO')">
+                                <label for="modo-por-debito" class="text-up-02">Simulação por débito</label>
+                            </div>
+                    
+                            <div class="br-radio d-inline-block">
+                                <input id="modo-agregado" type="radio" name="modo_simulacao" value="AGREGADO" onclick="selecionarModoSimulacao('AGREGADO')">
+                                <label for="modo-agregado" class="text-up-02">Simulação do valor total dos débitos</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- BLOCO 1: SIMULAÇÃO POR DÉBITO (DETALHADO) -->
+                    <div id="id-bloco-por-debito" class="d-none">
+                        <div class="table-responsive">
+                            <table class="br-table" id="id-tabela-debitos">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center">Débito</th>
+                                        <th scope="col" class="text-center">Principal (R$)</th>
+                                        <th scope="col" class="text-center">Multa (R$)</th>
+                                        <th scope="col" class="text-center">Juros (R$)</th>
+                                        <th scope="col" class="text-center">Total (R$)</th>
+                                        <th scope="col" class="text-center">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="id-corpo-tabela-debitos">
+                                    <!-- linhas inseridas dinamicamente por JS -->
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="4" class="text-right text-weight-semi-bold border-top p-3">Total Geral da Dívida:</td>
+                                        <td id="id-total-geral-debitos" class="text-center text-weight-semi-bold border-top p-3">R$ 0,00</td>
+                                        <td class="border-top p-3"></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                
+                    <!--BOTOES INCLUIR NOVO DEBITO E CONFIRMAR TOTAL DE DEBITOS-->
+                    <div class="col-12 my-5 text-center d-flex justify-content-around">
+                        <div>
+                        <button type="button" class="br-button secondary mt-4" id="id-btn-incluir-debito" onclick="incluirLinhaDebito()">
+                            <i class="fas fa-plus mr-2" aria-hidden="true"></i> Incluir novo débito
+                        </button>
+                        </div>
+                        <div>
+                            <button type="button" id="btnConfirmarTotalDebitos" onclick="confirmarTotalDebitos(this)" class="br-button primary mt-4">
+                                Confirmar total de débitos</button>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- BLOCO 2: SIMULAÇÃO AGREGADA -->
+                    <div id="id-bloco-agregado" class="d-none">
+                        <div class="table-responsive">
+                            <table class="br-table" id="id-tabela-agregado">
+                                <thead>
+                                    <tr>
+                                        <th scope="col" class="text-center">Débitos</th>
+                                        <th scope="col" class="text-center">Principal - Soma (R$)</th>
+                                        <th scope="col" class="text-center">Multa - Soma (R$)</th>
+                                        <th scope="col" class="text-center">Juros - Soma (R$)</th>
+                                        <th scope="col" class="text-center">Total (R$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="align-middle text-center text-weight-semi-bold">Total dos Débitos Informados</td>
+                                        <td class="align-middle">
+                                            <div class="br-input">
+                                                <input type="text" inputmode="decimal" class="text-center" placeholder="0,00" id="id-agregado-principal" oninput="atualizarValorAgregado(this, 'principal')">
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="br-input">
+                                                <input type="text" inputmode="decimal" class="text-center" placeholder="0,00" id="id-agregado-multa" oninput="atualizarValorAgregado(this, 'multa')">
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="br-input">
+                                                <input type="text" inputmode="decimal" class="text-center" placeholder="0,00" id="id-agregado-juros" oninput="atualizarValorAgregado(this, 'juros')">
+                                            </div>
+                                        </td>
+                                        <td class="align-middle text-center text-weight-semi-bold" id="id-agregado-total">R$ 0,00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div>
+                            <button type="button" id="btnConfirmarTotalDebitosAgregado" onclick="confirmarTotalDebitos(this)" class="br-button primary mt-4">
+                                Confirmar total de débitos</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+
+        <!--CLASSIFICACAO DOS DEBITOS-->
+        <section id="id-classificacao-debitos" class="secao container mb-5 d-none" name="classificao-debitos">
+        <h1 class="mt-5">Informações para classificação do débito e cálculo do desconto</h1>
+            <div class="row">
+                <div class="col-12">
+    
+                    <!--TABELA CAPACIDADE DE PAGAMENTOS-->
+                    <div class="br-table">
+                        <div>
+                            <table id="tabelaCapacidadePagamentos" class="mb-5">
+                                <tbody id="tabelaCapacidadePagamentosBody">
+                                    <tr>
+                                        <td class="text-right text-up-01">Capacidade de pagamento em 60 meses (R$) <span class="text-up-07">*</span></td>
+                                        <td class="col-2">
+                                            <div class="br-input obrigatorio">
+                                                <input type="text" class="text-center" id="caPag" onfocus="mostrarAjudaCapag()" oninput="validarValorNaoNegativo(this)" onchange="calcularRating(this)" name="capacidade_pagamento">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Valor total da dívida na PGFN e RFB (R$) <span class="text-up-07">*</span></td>
+                                        <td class="col-2">
+                                            <div class="br-input obrigatorio">
+                                                <input type="text" class="text-center" id="totalDebitosNaoContencioso" onfocus="mostrarAjudaCapag()" oninput="validarValorNaoNegativo(this)" onchange="calcularRating(this)" name="total_debitos_nao_contencioso">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right text-up-01">Total de débitos que deseja Transacionar (R$)</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="totalDebitosTransacionar" readonly name="total_debitos_transacionar">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="d-none">
+                                        <td class="text-right text-up-01">TOTAL DE DÉBITOS  "TRANSAÇÃO" - CÁLCULO CAPAG</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="totalDebitos" readonly name="total_debitos">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="d-none">
+                                        <td class="text-right text-up-01">Relação Total de débitos / Capag</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="relacaoDebitosCaPag" readonly onchange="preencheSecaoClassificacaoDebitos()" name="relacao_debitos_capag">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="d-none">
+                                        <td class="text-right text-up-01">Rating</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="rating" readonly name="rating">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="d-none">
+                                        <td class="text-right text-up-01">Desconto Teórico</td>
+                                        <td class="col-2">
+                                            <div class="br-input">
+                                                <input type="text" class="text-center bg-gray-20" id="descontoTeorico" readonly name="desconto_teorico">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                
+                            </table>
+
+                        </div>
+                    </div>
+                    <div id="id-resumo-classificacao-duplicado" class="mt-4 d-none">
+                        <h2 class="h3 mb-3">Resumo dos Cálculos</h2>
+                        <div class="row">
+                            <div class="col-12 col-lg-6 mb-3">
+                                <div class="resumo-calculo-card">
+                                    <h3 class="h5 text-weight-semi-bold mb-2">PGFN</h3>
+                                    <div class="resumo-calculo-indicador">
+                                        <span>Base de cálculo</span>
+                                        <strong id="resumoDividaPgfn">R$ 0,00</strong>
+                                    </div>
+                                    <div class="resumo-calculo-indicador">
+                                        <span>Rating</span>
+                                        <strong id="resumoRatingPgfn">-</strong>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 mb-3">
+                                <div class="resumo-calculo-card">
+                                    <h3 class="h5 text-weight-semi-bold mb-2">RFB</h3>
+                                    <div class="resumo-calculo-indicador">
+                                        <span>Base de cálculo</span>
+                                        <strong id="resumoBaseRfb">R$ 0,00</strong>
+                                    </div>
+                                    <div class="resumo-calculo-indicador">
+                                        <span>Rating</span>
+                                        <strong id="resumoRatingRfb">-</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="br-message info mt-3">
+                        <div class="content">
+                            <span class="message-body">
+                                <span class="text-up-07">*</span> Obtenha essas informações no site Regularize, acessando a opção “Negociar Dívida > Acesso ao Sistema de Negociações > Capacidade de Pagamento –
+                                <a href="https://www.regularize.pgfn.gov.br/" target="_blank" rel="noopener noreferrer"> Regularize (PGFN)
+                                </a>.
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- NOVO BOTÃO ADICIONADO AQUI -->
+                    <div class="col-12 mt-5 text-center">
+                        <button id="btnSimularModalidades" onclick="liberarSimulacao()" class="br-button primary mt-4">
+                            Simular Modalidades
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+        </section> 
+
+
+        <!-- [SETUP-6b v2] QUADRO-RESUMO COMPARATIVO INTERATIVO -->
+        <section id="id-quadro-resumo" class="secao container-fluid px-5 my-5 toPdf pagina1 d-none" name="quadro-resumo">
+            <div class="row">
+                <div class="col-12 mt-4 pt-4 border-top">
+                    <h1 class="mb-5">Quadro-Resumo Comparativo</h1>
+
+                    <!-- Estado vazio, exibido enquanto nenhuma modalidade foi simulada -->
+                    <div id="id-quadro-resumo-vazio" class="br-message info" role="status">
+                        <div class="icon"><i class="fas fa-info-circle" aria-hidden="true"></i></div>
+                        <div class="content">
+                            <span class="message-body">Nenhuma modalidade simulada até o momento. Preencha os dados nas seções acima para ver a comparação aqui.</span>
+                        </div>
+                    </div>
+
+                    <!-- Tabela Dinâmica do Quadro Resumo (Interativa) -->
+                    <div class="table-responsive d-none" id="id-quadro-resumo-tabela-container">
+                        <table class="br-table" id="id-tabela-quadro-resumo">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="align-middle text-center">Órgão/Modalidade</th>
+                                    <th scope="col" class="align-middle text-center">Vantagens</th>
+                                    <th scope="col" class="align-middle text-center" style="cursor:pointer;" onclick="alterarOrdenacaoQuadroResumo('dividaSemReducao')">
+                                        Dívida Elegível à Modalidade<br>(Sem Redução) <i class="fas fa-sort ml-1 text-muted" aria-hidden="true"></i>
+                                    </th>
+                                    <th scope="col" class="align-middle text-center">Modalidades</th>
+                                    <th scope="col" class="align-middle text-center" style="cursor:pointer;" onclick="alterarOrdenacaoQuadroResumo('reducaoPercentual')">
+                                        Redução <i class="fas fa-sort ml-1 text-muted" aria-hidden="true"></i>
+                                    </th>
+                                    <th scope="col" class="align-middle text-center" style="cursor:pointer;" onclick="alterarOrdenacaoQuadroResumo('saldoDevedor')">
+                                        Saldo Devedor (após redução) <i class="fas fa-sort ml-1 text-muted" aria-hidden="true"></i>
+                                    </th>
+                                    <th scope="col" class="align-middle text-center">Entrada</th>
+                                    <th scope="col" class="align-middle text-center">Nº de Parcelas</th>
+                                    <th scope="col" class="align-middle text-center">
+                                        Uso PF/BCN<br>
+                                        <select onchange="alterarFiltroPfBcn(this.value)" style="font-size:0.75rem; padding: 2px; border-radius: 4px; border: 1px solid #ccc; font-weight: normal;">
+                                            <option value="">Todos</option>
+                                            <option value="SIM">Somente SIM</option>
+                                            <option value="NAO">Somente NÃO</option>
+                                        </select>
+                                    </th>
+                                    <th scope="col" class="align-middle text-center">Detalhes</th>
+                                </tr>
+                            </thead>
+                            <tbody id="id-corpo-quadro-resumo">
+                                <!-- Linhas inseridas e controladas dinamicamente por JS (quadro-resumo.js) -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DETALHAMENTO RFB 50 MILHÕES -->
+        <section
+            id="id-detalhamento-rfb-50m"
+            class="secao container my-5 d-none">
+
+            <h2>
+                RFB - Transação Tributária Geral 2026
+                Até 50 milhões por processo
+            </h2>
+
+            <div id="id-conteudo-detalhamento-rfb-50m"></div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL GENÉRICO PARA O UTILS.JS -->
+    <div class="br-scrim-util foco" id="modal-scrim" data-scrim="true">
+        <div class="div br-modal medium" id="id-modal-generico" aria-modal="true" role="dialog" aria-labelledby="modal-generico">
+            <div class="br-modal-header">
+                <div class="modal-title" id="id-modal-generico-titulo">Mensagem</div>
+                <button class="br-button close circle" type="button" data-dismiss="true" aria-label="Fechar">
+                    <i class="fas fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="br-modal-body">
+                <p id="id-elemento-mensagem"></p>
+            </div>
+            <div class="br-modal-footer justify-content-end">
+                <button id="id-entendi" class="br-button primary" type="button" data-dismiss="true">Entendi</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- FOOTER GOV.BR -->
+    <br-footer>
+        <footer role="contentinfo" aria-label="Footer" class="br-footer mt-5xh">
+            <div class="container">
+                <div class="logo text-sm-left">
+                    <img alt="govbr" src="assets/img/logo_govbr_branco.png">
+                </div>
+                <section aria-label="Redes Sociais" class="d-sm-block secondary-info">
+                    <div class="row align-items-end justify-content-between py-5">
+                        <div role="list" class="col assigns text-right">
+                            <span class="sr-only">Parceiros</span>
+                            <a role="listitem" target="_blank" class="ml-4 partner" href="https://www.gov.br/receitafederal/pt-br" aria-label="Receita Federal">
+                                <img alt="receitafederal" src="assets/img/logo_rfb_branco.png">
+                            </a>
+                            <a role="listitem" target="_blank" class="ml-4 partner" href="https://www.gov.br/empresas-e-negocios/pt-br/redesim" aria-label="Empresas &amp; Negócios">
+                                <img alt="redesim" src="assets/img/logo_redesim_branco.svg">
+                            </a>
+                            <a role="listitem" target="_blank" class="ml-4 partner" href="https://www.gov.br/acessoainformacao/pt-br" aria-label="Acesso à Informação">
+                                <img alt="acessoainformacao" src="assets/img/logo_acesso_informacao.png">
+                            </a>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <section aria-label="Informações Legais" class="container-fluid">
+                <span class="br-divider my-3"></span>
+                <div class="info">
+                    <div class="text-down-01 text-medium pb-3">Versão 1.0.0 - Termo de uso e Política de Privacidade</div>
+                </div>
+            </section>
+        </footer>
+    </br-footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const assistente = document.getElementById('id-assistente-tributario');
+            const toggle = document.getElementById('id-assistente-toggle');
+            const fechar = document.getElementById('id-assistente-fechar');
+            const overlay = document.getElementById('id-assistente-overlay');
+            const input = document.getElementById('id-assistente-pergunta');
+            const corpoAssistente = document.getElementById('id-assistente-tributario-card');
+
+            if (!assistente || !toggle || !fechar || !overlay) {
+                return;
+            }
+
+            const mapaSugestoes = [
+                { padrao: /^💡\s*/, icone: 'fas fa-scale-balanced' },
+                { padrao: /^💰\s*/, icone: 'fas fa-money-bill' },
+                { padrao: /^📉\s*/, icone: 'fas fa-chart-line' },
+                { padrao: /^⏱\s*/, icone: 'fas fa-clock' },
+                { padrao: /^✅\s*/, icone: 'fas fa-check-circle' },
+                { padrao: /^📊\s*/, icone: 'fas fa-chart-column' },
+                { padrao: /^🎯\s*/, icone: 'fas fa-bullseye' },
+                { padrao: /^📚\s*/, icone: 'fas fa-book' },
+                { padrao: /^⚖️\s*/, icone: 'fas fa-scale-balanced' }
+            ];
+
+            const aplicarIdentidadeSugestoes = () => {
+                const bloco = document.getElementById('id-assistente-sugestoes-rapidas');
+                if (!bloco) {
+                    return;
+                }
+
+                const botoes = bloco.querySelectorAll('button.br-button');
+                botoes.forEach(botao => {
+                    if (botao.dataset.iconizado === 'true') {
+                        return;
+                    }
+
+                    let textoOriginal = (botao.textContent || '').trim();
+                    let classeIcone = 'fas fa-comments';
+
+                    mapaSugestoes.forEach(item => {
+                        if (item.padrao.test(textoOriginal)) {
+                            textoOriginal = textoOriginal.replace(item.padrao, '').trim();
+                            classeIcone = item.icone;
+                        }
+                    });
+
+                    botao.innerHTML = `<i class="${classeIcone}" aria-hidden="true"></i><span>${textoOriginal}</span>`;
+                    botao.dataset.iconizado = 'true';
+                });
+            };
+
+            const abrirAssistente = () => {
+                assistente.classList.add('is-open');
+                document.body.classList.add('assistente-open');
+                toggle.setAttribute('aria-expanded', 'true');
+                aplicarIdentidadeSugestoes();
+
+                if (input) {
+                    setTimeout(() => input.focus(), 220);
+                }
+            };
+
+            const fecharAssistente = () => {
+                assistente.classList.remove('is-open');
+                document.body.classList.remove('assistente-open');
+                toggle.setAttribute('aria-expanded', 'false');
+            };
+
+            toggle.addEventListener('click', abrirAssistente);
+            fechar.addEventListener('click', fecharAssistente);
+            overlay.addEventListener('click', fecharAssistente);
+
+            document.addEventListener('keydown', evento => {
+                if (evento.key === 'Escape' && assistente.classList.contains('is-open')) {
+                    fecharAssistente();
+                }
+            });
+
+            if (corpoAssistente && typeof MutationObserver !== 'undefined') {
+                const observer = new MutationObserver(() => aplicarIdentidadeSugestoes());
+                observer.observe(corpoAssistente, { childList: true, subtree: true });
+            }
+
+            aplicarIdentidadeSugestoes();
+        });
+    </script>
+
+    <!-- Início do componente VLibras -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+    <!-- Fim do componente VLibras -->
+
+    <script>
+        // Posiciona os tooltips de ajuda com position: fixed, escolhendo abrir abaixo ou acima do ícone
+        // conforme o espaço disponível, para que nunca sejam cortados pelo container da tabela.
+        (function () {
+            function posicionarTooltip(wrapper) {
+                const tip = wrapper.querySelector('.tooltip-texto');
+                if (!tip) return;
+                tip.classList.add('tooltip-fixo');
+                tip.classList.remove('tooltip-acima');
+
+                const margem = 8;
+                const r = wrapper.getBoundingClientRect();
+                const w = tip.offsetWidth;
+                const h = tip.offsetHeight;
+                const centro = r.left + r.width / 2;
+
+                let left = centro - w / 2;
+                left = Math.max(margem, Math.min(left, window.innerWidth - w - margem));
+
+                let top = r.bottom + 10;
+                if (top + h > window.innerHeight - margem && r.top - 10 - h >= margem) {
+                    top = r.top - 10 - h;
+                    tip.classList.add('tooltip-acima');
+                }
+
+                tip.style.left = left + 'px';
+                tip.style.top = top + 'px';
+                tip.style.setProperty('--seta-x', (centro - left) + 'px');
+            }
+
+            function aoEntrar(e) {
+                const wrapper = e.target.closest && e.target.closest('.tooltip-ajuda');
+                if (wrapper) posicionarTooltip(wrapper);
+            }
+
+            document.addEventListener('mouseover', aoEntrar);
+            document.addEventListener('focusin', aoEntrar);
+        })();
+    </script>
+</body>
+</html>
