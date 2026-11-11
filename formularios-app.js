@@ -179,8 +179,29 @@
         </div>`;
     }
 
+    // Formulário oficial correspondente a cada aba (página "Simular Transação Tributária" da RFB)
+    const BASE_OFICIAL = 'https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/formularios/impostos/transacao/';
+    const OFICIAIS = {
+        ATE60SM: { url: BASE_OFICIAL + 'transacao-2026/ate60sm.html', nome: 'Transação Tributária de Pequeno Valor (Edital RFB 10/2026)' },
+        FAZENDARIOS: { url: BASE_OFICIAL + 'transacao-2026/fazendarios.html', nome: 'Transação de até R$ 50 milhões — Débitos Fazendários (Edital RFB 9/2026)' },
+        PREVIDENCIARIOS: { url: BASE_OFICIAL + 'transacao-2026/previdenciarios.html', nome: 'Transação de até R$ 50 milhões — Débitos Previdenciários (Edital RFB 9/2026)' },
+        CONTROVERSIA: { url: BASE_OFICIAL + 'controversia-juridica-2026/editais.html/', nome: 'Transação de Relevante e Disseminada Controvérsia Jurídica (Editais Conjuntos PGFN/RFB 4 e 5/2026)' }
+    };
+
+    function renderizarLinkOficial() {
+        const o = OFICIAIS[atual];
+        $('#link-oficial').innerHTML = `
+            <p><strong>Formulário oficial desta simulação</strong>${esc(o.nome)}. Para aderir, preencha-o no site da Receita Federal e anexe o PDF gerado ao pedido.</p>
+            <a class="botao-link externo" href="${o.url}" target="_blank" rel="noopener noreferrer">Abrir o formulário oficial<span class="sr-only">: ${esc(o.nome)} — site da Receita Federal, abre em nova aba</span></a>`;
+    }
+
     function renderizarEntradas() {
-        document.querySelectorAll('#abas button').forEach(b => b.classList.toggle('ativa', b.dataset.form === atual));
+        document.querySelectorAll('#abas button').forEach(b => {
+            const ativa = b.dataset.form === atual;
+            b.classList.toggle('ativa', ativa);
+            b.setAttribute('aria-pressed', ativa ? 'true' : 'false');
+        });
+        renderizarLinkOficial();
         const s = estados[atual];
         const html = atual === 'ATE60SM' ? htmlAte60sm(s) : atual === 'CONTROVERSIA' ? htmlControversia(s) : html50M(s);
         $('#entradas').innerHTML = html;

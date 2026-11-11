@@ -4,90 +4,105 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulários de adesão (não oficial)</title>
+    <meta name="description" content="Simulador não oficial das contas dos formulários de adesão (discriminativos) da transação tributária da RFB.">
+    <link rel="stylesheet" href="./estilo.css">
     <style>
-        :root {
-            --azul: #1351b4; --azul-escuro: #0c326f; --azul-claro: #dbe8fb; --verde: #168821;
-            --vermelho: #b00020; --laranja: #b35c00; --texto: #1b1b1b; --texto-suave: #555;
-            --borda: #d6d6d6; --fundo: #f5f6f8; --cartao: #ffffff;
-        }
-        * { box-sizing: border-box; }
-        body { margin: 0; font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 15px; color: var(--texto); background: var(--fundo); }
-        header { background: var(--azul-escuro); color: #fff; padding: 16px 24px; }
-        header h1 { margin: 0; font-size: 1.35rem; font-weight: 600; }
-        header p { margin: 4px 0 0; opacity: .85; font-size: .9rem; }
-        header a { color: #fff; }
-        main { max-width: 1300px; margin: 0 auto; padding: 20px 16px 60px; }
-        .aviso { background: #fff5c2; border: 1px solid #f0d36b; border-radius: 10px; padding: 10px 14px; font-size: .85rem; margin-bottom: 18px; }
-        .abas { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
-        .abas button { border-radius: 10px 10px 0 0; border-bottom: 3px solid transparent; }
+        /* específicos desta página */
+        .abas { display: flex; gap: 8px; flex-wrap: wrap; margin: 6px 0 22px; }
+        .abas button { height: 40px; }
         .abas button.ativa { background: var(--azul); color: #fff; }
-        .grade { display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 16px; }
-        .cartao { background: var(--cartao); border: 1px solid var(--borda); border-radius: 12px; padding: 16px 18px; box-shadow: 0 2px 8px rgba(0,0,0,.04); margin-bottom: 16px; }
-        .cartao h2 { margin: 0 0 12px; font-size: 1.05rem; color: var(--azul-escuro); }
-        .cartao h3 { margin: 14px 0 8px; font-size: .95rem; }
-        .opcoes label { display: flex; gap: 8px; align-items: flex-start; padding: 4px 0; cursor: pointer; font-size: .92rem; }
-        .opcoes input { margin-top: 3px; accent-color: var(--azul); }
-        .linha-campo { display: grid; grid-template-columns: 1fr 190px; gap: 10px; align-items: center; margin: 8px 0; }
-        .linha-campo span { font-size: .9rem; }
-        input[type="text"], select { font: inherit; padding: 6px 8px; border: 1px solid #888; border-radius: 6px; background: #fff; color: var(--texto); }
-        input.moeda { text-align: right; width: 100%; }
-        input:focus, select:focus { outline: 2px solid var(--azul); outline-offset: 1px; }
-        table { border-collapse: collapse; width: 100%; }
-        .tabela th, .tabela td { padding: 6px 8px; border-bottom: 1px solid #eee; font-size: .85rem; text-align: right; white-space: nowrap; }
-        .tabela th { background: #f0f0f0; font-weight: 600; text-align: center; white-space: normal; }
+        .grade { margin-bottom: 16px; }
+        main > #entradas > .cartao { margin-bottom: 16px; }
+        .opcoes label { font-size: .98rem; padding: 5px 0; }
+        .tabela th, .tabela td { padding: 8px 10px; border-bottom: 1px solid #ececec; font-size: .88rem; text-align: right; white-space: nowrap; }
+        .tabela th { background: var(--cinza-cabecalho); font-weight: 500; text-align: center; white-space: normal; }
         .tabela td.esq, .tabela th.esq { text-align: left; }
         .tabela tr.total td { font-weight: 700; background: #fafafa; }
-        .tabela-entrada input { width: 100%; text-align: right; min-width: 90px; }
-        .tabela-entrada td { padding: 3px; }
-        .container-tabela { overflow-x: auto; }
-        button { font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--azul); background: #fff; color: var(--azul); padding: 6px 16px; font-weight: 600; }
-        button.primario { background: var(--azul); color: #fff; }
-        button.pequeno { padding: 2px 10px; font-size: .8rem; }
-        .barra-botoes { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
-        .dica { font-size: .8rem; color: var(--texto-suave); }
-        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-        .kpis div { background: var(--fundo); border-radius: 8px; padding: 8px 10px; font-size: .8rem; }
-        .kpis strong { display: block; font-size: 1.05rem; color: var(--azul-escuro); font-variant-numeric: tabular-nums; }
-        .erros { background: #fde8eb; border: 1px solid #f3b5bf; color: var(--vermelho); border-radius: 10px; padding: 10px 14px; font-size: .85rem; margin-bottom: 14px; }
-        .avisos { background: #fff4e5; border: 1px solid #f5cf9a; color: #6b3b00; border-radius: 10px; padding: 10px 14px; font-size: .82rem; margin-bottom: 14px; }
-        .erros ul, .avisos ul { margin: 4px 0 0 18px; padding: 0; }
-        .item-edital { background: var(--azul-claro); color: var(--azul-escuro); border-radius: 8px; padding: 8px 12px; font-size: .88rem; margin-bottom: 10px; }
-        .toast { position: fixed; bottom: 18px; right: 18px; background: var(--azul-escuro); color: #fff; padding: 10px 16px; border-radius: 8px; opacity: 0; transition: opacity .3s; pointer-events: none; }
-        .toast.visivel { opacity: 1; }
-        .oculto { display: none !important; }
-        @media (max-width: 640px) { .linha-campo { grid-template-columns: 1fr; } main { padding: 14px 10px 50px; } }
+        .tabela-entrada input { width: 100%; min-width: 100px; text-align: right; }
+        .tabela-entrada td { padding: 4px; }
+        .tabela select { height: 36px; border-color: var(--azul); }
+        #resultado .container-tabela { box-shadow: none; border: 0; border-radius: 0; }
+        #resultado .cartao { margin-bottom: 16px; }
+        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+        .kpis div { background: var(--fundo); border-radius: 8px; padding: 9px 12px; font-size: .8rem; }
+        .kpis strong { display: block; font-size: 1.1rem; color: var(--azul-escuro); }
+        .item-edital { background: var(--azul-info); color: var(--azul-escuro); border-radius: 4px; padding: 10px 14px; font-size: .9rem; margin-bottom: 14px; font-weight: 600; }
+        .linha-campo span { font-size: .9rem; }
     </style>
 </head>
 <body>
-<header>
-    <h1>Formulários de adesão (discriminativos) — simulador não oficial</h1>
-    <p>Reproduz as contas dos formulários da RFB que geram o PDF anexado ao pedido de adesão. Sem vínculo com a Receita Federal · <a href="./index.html">voltar ao simulador da calculadora</a></p>
+<a class="pular-conteudo" href="#conteudo">Pular para o conteúdo</a>
+<header class="topo">
+    <div class="topo-conteudo">
+        <div class="marca">Formulários de adesão <span class="selo">não oficial</span>
+            <small>Reproduz as contas dos formulários da RFB que geram o PDF anexado ao pedido de adesão · sem vínculo com a Receita Federal</small>
+        </div>
+        <nav class="nav-topo" aria-label="Navegação entre os simuladores">
+            <ul>
+                <li><a href="./index.html">Calculadora<small>Compara todas as modalidades RFB e PGFN</small></a></li>
+                <li><a href="./formularios.html" aria-current="page">Formulários de adesão<small>Contas do pedido de adesão na RFB</small></a></li>
+            </ul>
+        </nav>
+    </div>
 </header>
-<main>
-    <div class="aviso">
-        Estes formulários calculam <strong>diferente da calculadora</strong> (por exemplo, no de até R$ 50 milhões o desconto é aplicado <strong>débito a débito</strong>).
-        Aqui os números saem iguais aos do formulário oficial, inclusive arredondamentos e falhas conhecidas, que aparecem como aviso.
-        <strong>Ferramenta não oficial</strong>: não gera o PDF discriminativo nem substitui os formulários da Receita Federal. Simulação informativa, que não gera direito à transação; nenhum dado sai do seu navegador. Detalhes em <code>FORMULAS.md §12</code>.
+<main id="conteudo" tabindex="-1">
+    <div class="aviso-importante" role="note">
+        <strong class="titulo-aviso">⚠ Aviso importante</strong>
+        <ul>
+            <li>Estes formulários calculam <strong>diferente da calculadora</strong>: no de até R$ 50 milhões, por exemplo, o desconto é aplicado <strong>débito a débito</strong>. Aqui os números saem iguais aos do formulário oficial, inclusive arredondamentos e falhas conhecidas, que aparecem como aviso.</li>
+            <li><strong>Ferramenta não oficial</strong>: não gera o PDF discriminativo nem substitui os formulários da Receita Federal. A simulação é informativa e não gera direito à transação. Nenhum dado sai do seu navegador.</li>
+        </ul>
     </div>
 
-    <nav class="abas" id="abas">
+    <div class="atalho-pagina">
+        <p><strong>Quer comparar todas as modalidades, da RFB e da PGFN?</strong>
+            A calculadora mostra lado a lado as quatro modalidades, com as mesmas fórmulas do simulador oficial.</p>
+        <a class="botao-link secundario" href="./index.html"><span aria-hidden="true">←</span> Voltar para a calculadora</a>
+    </div>
+
+    <h1>Formulários de adesão (discriminativos)</h1>
+
+    <section class="cartao" aria-labelledby="titulo-oficiais" style="margin-bottom:22px">
+        <h2 id="titulo-oficiais">Formulários oficiais da Receita Federal</h2>
+        <p class="dica" style="margin-top:0">Para aderir, preencha o formulário oficial: é ele que gera o PDF (discriminativo) a ser anexado ao pedido de adesão. Os links abrem o site da Receita Federal em nova aba.</p>
+        <ul class="lista-oficiais">
+            <li><a class="externo" href="https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/formularios/impostos/transacao/transacao-2026/ate60sm.html" target="_blank" rel="noopener noreferrer">Transação Tributária de Pequeno Valor (Edital RFB 10/2026)<span class="sr-only"> — site da Receita Federal, abre em nova aba</span></a></li>
+            <li><a class="externo" href="https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/formularios/impostos/transacao/transacao-2026/fazendarios.html" target="_blank" rel="noopener noreferrer">Transação de até R$ 50 milhões — Débitos Fazendários (Edital RFB 9/2026)<span class="sr-only"> — site da Receita Federal, abre em nova aba</span></a></li>
+            <li><a class="externo" href="https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/formularios/impostos/transacao/transacao-2026/previdenciarios.html" target="_blank" rel="noopener noreferrer">Transação de até R$ 50 milhões — Débitos Previdenciários (Edital RFB 9/2026)<span class="sr-only"> — site da Receita Federal, abre em nova aba</span></a></li>
+            <li><a class="externo" href="https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/formularios/impostos/transacao/controversia-juridica-2026/editais.html/" target="_blank" rel="noopener noreferrer">Transação de Relevante e Disseminada Controvérsia Jurídica (Editais Conjuntos PGFN/RFB 4 e 5/2026)<span class="sr-only"> — site da Receita Federal, abre em nova aba</span></a></li>
+        </ul>
+        <p class="dica">Todos estão reunidos na página <a class="externo" href="https://www.gov.br/receitafederal/pt-br/assuntos/orientacao-tributaria/transacao-tributaria/simular-transacao" target="_blank" rel="noopener noreferrer">Simular Transação Tributária<span class="sr-only"> — site da Receita Federal, abre em nova aba</span></a>.</p>
+    </section>
+
+    <h2 id="titulo-abas">Escolha o formulário para simular aqui</h2>
+    <nav class="abas" id="abas" aria-labelledby="titulo-abas">
         <button type="button" data-form="ATE60SM">Pequeno Valor (até 60 SM)</button>
         <button type="button" data-form="FAZENDARIOS">Até R$ 50 mi — fazendários</button>
         <button type="button" data-form="PREVIDENCIARIOS">Até R$ 50 mi — previdenciários</button>
         <button type="button" data-form="CONTROVERSIA">Controvérsia jurídica</button>
     </nav>
 
+    <div id="link-oficial" class="link-oficial" aria-live="polite"></div>
+
     <div id="entradas"></div>
 
-    <div class="barra-botoes">
+    <div class="barra-botoes centro">
         <button type="button" class="primario" id="btn-copiar-link">Copiar link desta simulação</button>
         <button type="button" id="btn-copiar-json">Copiar resultado (JSON)</button>
         <button type="button" id="btn-limpar">Limpar este formulário</button>
     </div>
 
-    <section id="resultado"></section>
+    <section id="resultado" class="separada" aria-live="polite"></section>
 </main>
-<div class="toast" id="toast"></div>
+<footer class="rodape">
+    <div>
+        Projeto independente e não oficial, sem vínculo com a Receita Federal ou a PGFN ·
+        contas conferidas com o código dos formulários oficiais de 10/11/2026 ·
+        <a href="https://github.com/Weriqui/simulador-rfb" target="_blank" rel="noopener">código-fonte no GitHub</a> ·
+        fonte Raleway (SIL Open Font License)
+    </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script src="./motor-formularios.js"></script>
 <script src="./formularios-app.js"></script>
 </body>
